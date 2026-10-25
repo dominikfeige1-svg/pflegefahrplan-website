@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>PflegeFahrplan Werkzeuge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Digitale Werkzeuge zu den Büchern der Reihe PflegeFahrplan. Alle Eingaben bleiben auf deinem Gerät.">
+<meta name="robots" content="noindex">
+<style>
+/* Layout: schmale Arbeitsspalte wie eine Buchseite, Werkzeugkopf mit Band-Form, darunter Formular und Aktionsleiste */
+@font-face{font-family:"Figtree";src:url("/werkzeuge/fonts/Figtree.woff2") format("woff2");font-weight:300 900;font-display:swap}
+@font-face{font-family:"Source Serif 4";src:url("/werkzeuge/fonts/SourceSerif4.woff2") format("woff2");font-weight:200 900;font-display:swap}
+:root{
+  --bg:#FBF6F0; --paper:#FFFFFF; --ink:#1E2A2C; --muted:#5B6B6D; --line:#E3D8CC;
+  --petrol:#0F6670; --petrol-soft:#E7F1F1; --orange:#A9532F; --orange-soft:#FBEFE9;
+  --navy:#0E2C40; --gruen:#2F6B4F; --gruen-soft:#EAF3EE; --warn:#8A5A12; --warn-soft:#FFF8EC;
+  --f-head:"Figtree","Helvetica Neue",Arial,sans-serif; --f-body:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A1C; --paper:#16252A; --ink:#E9EEEC; --muted:#9FB1B0; --line:#2C3F43;
+  --petrol:#5FB3B8; --petrol-soft:#18363A; --orange:#E39268; --orange-soft:#3A2419;
+  --navy:#D6E4EA; --gruen:#7CC09C; --gruen-soft:#173027; --warn:#E7B868; --warn-soft:#33270F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A1C; --paper:#16252A; --ink:#E9EEEC; --muted:#9FB1B0; --line:#2C3F43;
+  --petrol:#5FB3B8; --petrol-soft:#18363A; --orange:#E39268; --orange-soft:#3A2419;
+  --navy:#D6E4EA; --gruen:#7CC09C; --gruen-soft:#173027; --warn:#E7B868; --warn-soft:#33270F; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--f-body);margin:0}
+.wrap{max-width:46rem;margin:0 auto;padding-block:1.2rem 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,.lab,button,.btn,label,th,.chip,.brand,.crumb,input,select,textarea{font-family:var(--f-head)}
+h1{font-size:1.75rem;line-height:1.15;color:var(--navy);margin:.2rem 0 .4rem;text-wrap:balance}
+h2{font-size:1.1rem;color:var(--petrol);margin:2rem 0 .7rem;text-wrap:balance}
+h3{font-size:.98rem;margin:1.2rem 0 .4rem;color:var(--ink)}
+p{margin:0 0 .8rem}
+a{color:var(--petrol)}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:800;letter-spacing:.14em;font-size:.72rem;color:var(--petrol);text-decoration:none;text-transform:uppercase}
+.brand svg{width:1.6rem;height:1.6rem}
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.crumb{font-size:.8rem;color:var(--muted)}
+.crumb a{color:var(--muted)}
+.head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1rem;align-items:start;margin-bottom:1.2rem}
+.shape{width:3.4rem;height:3.4rem;flex:none}
+.eyebrow{font:800 .72rem var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--orange)}
+.intro{color:var(--ink)}
+.privacy{font:500 .82rem/1.45 var(--f-head);color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:.6rem;padding:.7rem .9rem;margin:1rem 0 0;display:flex;gap:.6rem;align-items:flex-start}
+.privacy svg{flex:none;width:1.1rem;height:1.1rem;margin-top:.1rem}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:.8rem;padding:1.1rem 1.1rem 1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.9rem 1rem}
+.field{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-weight:700;font-size:.85rem;color:var(--ink)}
+.hint{font:400 .8rem/1.4 var(--f-head);color:var(--muted)}
+input,select,textarea{font-size:1rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:.5rem;padding:.6rem .7rem;width:100%;min-width:0}
+textarea{min-height:5.5rem;resize:vertical;line-height:1.45;font-family:var(--f-body)}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--petrol);outline-offset:2px}
+input[type=checkbox]{width:1.35rem;height:1.35rem;accent-color:var(--gruen);flex:none;margin:.15rem 0 0}
+.out{background:var(--petrol-soft);border-radius:.7rem;padding:1rem 1.1rem;margin:1rem 0;font-family:var(--f-head)}
+.out .row{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.35rem 0;border-bottom:1px solid var(--line)}
+.out .row:last-child{border-bottom:0}
+.out b{color:var(--navy);font-variant-numeric:tabular-nums}
+.out .big{font-size:1.35rem;font-weight:800;color:var(--petrol);font-variant-numeric:tabular-nums}
+.warnbox{background:var(--warn-soft);border-left:.3rem solid var(--warn);border-radius:.5rem;padding:.8rem 1rem;font:500 .9rem/1.5 var(--f-head);margin:1rem 0}
+.tipbox{background:var(--gruen-soft);border-left:.3rem solid var(--gruen);border-radius:.5rem;padding:.8rem 1rem;font:500 .9rem/1.5 var(--f-head);margin:1rem 0}
+.check{display:flex;gap:.7rem;align-items:flex-start;padding:.45rem 0;font-size:1rem;font-family:var(--f-body);font-weight:400;cursor:pointer}
+.check.done span{color:var(--muted);text-decoration:line-through}
+.progress{height:.5rem;background:var(--line);border-radius:1rem;overflow:hidden;margin:.4rem 0 .2rem}
+.progress i{display:block;height:100%;background:var(--gruen);width:0;transition:width .3s}
+.tbl{overflow-x:auto;margin:.6rem 0;border:1px solid var(--line);border-radius:.6rem;background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-family:var(--f-head);font-size:.88rem}
+th{text-align:left;background:var(--petrol-soft);color:var(--navy);font-weight:800;padding:.55rem .5rem;vertical-align:bottom}
+td{border-top:1px solid var(--line);padding:.35rem .4rem;vertical-align:top}
+td.fl{font-weight:700;color:var(--ink);padding-top:.7rem;min-width:8rem}
+td input,td textarea,td select{font-size:.9rem;padding:.45rem .5rem;font-family:var(--f-head)}
+td textarea{min-height:2.6rem}
+td .del{background:none;border:0;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:.4rem}
+.acts{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.4rem 0 .6rem}
+.btn{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;font-size:.92rem;padding:.7rem 1.05rem;border-radius:2rem;border:0;cursor:pointer;background:var(--petrol);color:var(--paper);text-decoration:none;line-height:1.2}
+.btn.alt{background:var(--paper);color:var(--petrol);border:1.5px solid var(--petrol)}
+.btn.or{background:var(--orange)}
+.btn.ghost{background:none;color:var(--muted);border:1.5px dashed var(--line)}
+.btn[aria-disabled=true]{opacity:.45;cursor:not-allowed}
+.btn.pulse{animation:pulse 1.2s ease 3}
+@keyframes pulse{50%{box-shadow:0 0 0 .5rem color-mix(in srgb,var(--orange) 35%,transparent)}}
+.msg{font:600 .88rem/1.45 var(--f-head);color:var(--gruen);min-height:1.2rem;margin:.3rem 0}
+.msg.err{color:var(--orange)}
+.mailbox{background:var(--paper);border:1px dashed var(--petrol);border-radius:.6rem;padding:.8rem;margin:.6rem 0;font:400 .85rem/1.45 var(--f-head);white-space:pre-wrap;word-break:break-word}
+.letter{background:var(--paper);border:1px solid var(--line);border-radius:.4rem;padding:1.4rem 1.3rem;font:1rem/1.6 var(--f-body);white-space:pre-wrap;box-shadow:0 .3rem 1rem rgba(14,44,64,.06)}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.8rem}
+.tool{display:flex;flex-direction:column;gap:.3rem;padding:.9rem 1rem;background:var(--paper);border:1px solid var(--line);border-radius:.7rem;text-decoration:none;color:var(--ink);min-width:0}
+.tool:hover{border-color:var(--petrol)}
+.tool b{font:800 .98rem/1.3 var(--f-head);color:var(--navy)}
+.tool span{font:500 .8rem/1.4 var(--f-head);color:var(--muted)}
+.bandhead{display:flex;align-items:center;gap:.7rem;margin:2.2rem 0 .8rem}
+.bandhead svg{width:2rem;height:2rem;flex:none}
+.bandhead h2{margin:0}
+.notes{list-style:none;margin:1rem 0;padding:0;display:flex;flex-direction:column;gap:.6rem}
+.notes li{background:var(--paper);border:1px solid var(--line);border-radius:.6rem;padding:.7rem .9rem;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2rem .8rem}
+.notes small{font:600 .75rem var(--f-head);color:var(--muted);grid-column:1}
+.notes p{margin:0;white-space:pre-wrap;grid-column:1;word-break:break-word}
+.notes button{grid-row:1/3;grid-column:2;background:none;border:0;color:var(--muted);cursor:pointer;font:600 .8rem var(--f-head)}
+.lrows{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+.lrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(9rem,13rem);gap:.4rem 1rem;align-items:center;background:var(--paper);border:1px solid var(--line);border-left:.3rem solid var(--line);border-radius:.6rem;padding:.7rem .9rem}
+.lrow b{display:block;font:800 .95rem/1.3 var(--f-head);color:var(--navy)}
+.lrow .amt{display:block;font:500 .85rem/1.4 var(--f-head);color:var(--muted);font-variant-numeric:tabular-nums}
+.lrow[data-st=genutzt]{border-left-color:var(--gruen)}.lrow[data-st=beantragt]{border-left-color:var(--petrol)}.lrow[data-st=offen]{border-left-color:var(--orange)}
+@media (max-width:30rem){.lrow{grid-template-columns:minmax(0,1fr)}}
+.chip{display:inline-block;font:700 .72rem var(--f-head);padding:.15rem .55rem;border-radius:1rem;background:var(--petrol-soft);color:var(--petrol)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.8rem}
+.nk{border:2px dashed var(--line);border-radius:.6rem;padding:1rem;background:var(--paper);min-height:8rem}
+.nk .chip{margin-bottom:.6rem}
+.nk p{font:600 1.05rem/1.4 var(--f-body);margin:0}
+.confirm{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;font:600 .88rem var(--f-head);color:var(--orange);margin:.4rem 0}
+.foot{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font:500 .8rem/1.5 var(--f-head);color:var(--muted)}
+.pv{display:none}
+.testnote{background:var(--navy);color:var(--bg);font:600 .82rem/1.45 var(--f-head);border-radius:.6rem;padding:.7rem .9rem;margin:0 0 1rem}
+@media (max-width:30rem){h1{font-size:1.45rem}.head{grid-template-columns:minmax(0,1fr)}.shape{width:2.6rem;height:2.6rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  @page{size:A4;margin:14mm}
+  :root{--bg:#fff;--paper:#fff;--ink:#000;--muted:#444;--line:#999;--petrol:#0F6670;--petrol-soft:#fff;--navy:#000;color-scheme:light}
+  body{font-size:11pt}
+  .noprint,.acts,.privacy,.top,.foot,.confirm,.msg,.testnote,td .del,.addrow{display:none!important}
+  .wrap{max-width:none;padding:0}
+  input,select,textarea{display:none!important}
+  input[type=checkbox]{display:inline-block!important}
+  .pv{display:block;min-height:1.2em;border-bottom:.5pt solid #999;padding:2pt 0;white-space:pre-wrap;font-family:var(--f-body)}
+  td .pv{border:0}
+  .card,.out,.tbl{border:.5pt solid #999;break-inside:avoid}
+  table{min-width:0;font-size:9pt}
+  .tbl{overflow:visible}
+}
+</style>
+
+</head><body><div class="wrap" id="app"></div>
+
+<script>
+(function(){
+"use strict";
+/* ============ Grundfunktionen ============ */
+var D = document, APP = D.getElementById('app');
+var SANDBOX = (function(){ try { return window.self !== window.top; } catch(e){ return true; } })();
+var SITE = /\/werkzeuge(\/|$)/.test(location.pathname);
+function store(k, v){ try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){ return null; } }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function el(html){ var t = D.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
+function link(slug){ return SITE ? '/werkzeuge/' + slug : '#' + slug; }
+if (SANDBOX && !SITE) { var gl = D.createElement('link'); gl.rel = 'stylesheet'; gl.href = 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap'; D.head.appendChild(gl); }
+
+/* ============ Datum: Arbeitstage und bundesweite Feiertage ============ */
+function easter(y){ var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1; return new Date(y,mo-1,da); }
+var HCACHE = {};
+function holidays(y){
+  if (HCACHE[y]) return HCACHE[y];
+  var e = easter(y), add = function(d,n){ var x = new Date(d); x.setDate(x.getDate()+n); return x; };
+  var list = [new Date(y,0,1), add(e,-2), add(e,1), new Date(y,4,1), add(e,39), add(e,50), new Date(y,9,3), new Date(y,11,25), new Date(y,11,26)];
+  HCACHE[y] = list.map(key); return HCACHE[y];
+}
+function key(d){ return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+function isWork(d){ var w = d.getDay(); return w !== 0 && w !== 6 && holidays(d.getFullYear()).indexOf(key(d)) < 0; }
+function parse(v){ if (!v) return null; var p = v.split('-'); if (p.length !== 3) return null; var d = new Date(+p[0], +p[1]-1, +p[2]); return isNaN(d) ? null : d; }
+function iso(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function addWork(d, n){ var x = new Date(d); while (n > 0){ x.setDate(x.getDate()+1); if (isWork(x)) n--; } return x; }
+function addDays(d, n){ var x = new Date(d); x.setDate(x.getDate()+n); return x; }
+function addMonth(d){ var y = d.getFullYear(), m = d.getMonth()+1, last = new Date(y, m+1, 0).getDate(); return new Date(y, m, Math.min(d.getDate(), last)); }
+function nextWork(d){ var x = new Date(d); while (!isWork(x)) x.setDate(x.getDate()+1); return x; }
+function de(d){ return d ? d.toLocaleDateString('de-DE', {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'}) : '–'; }
+function deShort(v){ var d = parse(v); return d ? d.toLocaleDateString('de-DE') : v; }
+function today(){ return iso(new Date()); }
+
+/* ============ Kalenderdatei (.ics) ============ */
+function icsText(evs){
+  var z = function(d){ return iso(d).replace(/-/g,''); }, t = function(d, hm){ return z(d) + 'T' + hm.replace(':','') + '00'; };
+  var stamp = new Date().toISOString().replace(/[-:]/g,'').slice(0,15) + 'Z';
+  var out = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PflegeFahrplan//Werkzeuge//DE','CALSCALE:GREGORIAN'];
+  evs.forEach(function(e, i){
+    out.push('BEGIN:VEVENT','UID:' + Date.now() + '-' + i + '@mein-pflegefahrplan.de','DTSTAMP:' + stamp);
+    if (e.time){ var end = e.time.split(':'); var mins = (+end[0])*60 + (+end[1]) + (e.dur || 30); out.push('DTSTART:' + t(e.date, e.time), 'DTEND:' + t(e.date, String(Math.floor(mins/60)%24).padStart(2,'0') + ':' + String(mins%60).padStart(2,'0'))); }
+    else { out.push('DTSTART;VALUE=DATE:' + z(e.date), 'DTEND;VALUE=DATE:' + z(addDays(e.date,1))); }
+    if (e.rrule) out.push('RRULE:' + e.rrule);
+    out.push('SUMMARY:' + icsEsc(e.title));
+    if (e.desc) out.push('DESCRIPTION:' + icsEsc(e.desc));
+    out.push('BEGIN:VALARM','TRIGGER:' + (e.alarm || (e.time ? '-PT10M' : '-PT15H')),'ACTION:DISPLAY','DESCRIPTION:' + icsEsc(e.title),'END:VALARM','END:VEVENT');
+  });
+  out.push('END:VCALENDAR');
+  return out.map(function(l){ var r = []; while (l.length > 60){ r.push(l.slice(0,60)); l = ' ' + l.slice(60); } r.push(l); return r.join('\r\n'); }).join('\r\n');
+}
+function icsEsc(s){ return String(s).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;'); }
+function download(name, text, type){
+  var b = new Blob([text], {type: type}), u = URL.createObjectURL(b), a = D.createElement('a');
+  a.href = u; a.download = name; D.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 4000);
+}
+
+/* ============ Formen der Bände (D269) ============ */
+function shape(band){
+  if (band === 1) return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4"/></svg>';
+  if (band === 2) return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L38 36 L2 36 Z" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4" stroke-linejoin="round"/></svg>';
+  return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="8" width="32" height="26" rx="4" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4"/><path d="M10 16h20M10 22h14" stroke="var(--petrol)" stroke-width="2.4" stroke-linecap="round"/></svg>';
+}
+var BANDNAME = {1:'Band 1 · Rollentausch', 2:'Band 2 · Klartext Pflegegrad'};
+var LOGO = '<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="23" r="5" fill="none" stroke="var(--petrol)" stroke-width="2.6"/><path d="M14 23 C 20 23, 18 9, 24 9" fill="none" stroke="var(--orange)" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="9" r="3.2" fill="var(--orange)"/></svg>';
+
+/* ============ Inhalte der Werkzeuge ============ */
+var MOD = [
+  ['Mobilität','Fortbewegen in der Wohnung, Treppen, Aufstehen, Umsetzen.'],
+  ['Kognitive und kommunikative Fähigkeiten','Orientierung, Erinnern, Verstehen, Gespräche führen.'],
+  ['Verhaltensweisen und psychische Problemlagen','Unruhe, Ängste, nächtliches Umherlaufen, Abwehr von Hilfe.'],
+  ['Selbstversorgung','Waschen, Anziehen, Essen, Trinken, Toilette.'],
+  ['Umgang mit krankheits- oder therapiebedingten Anforderungen','Medikamente, Arzttermine, Blutzucker, Verbände.'],
+  ['Gestaltung des Alltagslebens und soziale Kontakte','Tagesablauf, Beschäftigung, Kontakte, Ruhen und Schlafen.']
+];
+var MUSTER = [
+  '„Mein Vater kann innerhalb der Wohnung nur mit dem Rollator und unter Aufsicht gehen. Treppen bewältigt er nicht mehr selbstständig, seit [Datum/Ereignis]. Beim Aufstehen aus dem Sessel braucht er in der Regel Unterstützung.“',
+  '„Meine Mutter erkennt vertraute Personen meist noch, weiß aber häufig nicht mehr, welcher Wochentag ist oder ob sie bereits gegessen hat. Gespräche über mehr als zwei, drei Sätze hinweg verliert sie zunehmend den Faden.“',
+  '„Es kommt mehrmals wöchentlich zu Unruhephasen, meist am späten Nachmittag, in denen mein Vater umherläuft und wiederholt nach seiner verstorbenen Frau fragt.“',
+  '„Beim Waschen und Anziehen braucht meine Mutter täglich vollständige Unterstützung. Beim Essen kann sie selbstständig essen, wenn das Essen bereits mundgerecht vorbereitet ist.“',
+  '„Die tägliche Medikamenteneinnahme muss vollständig überwacht werden, da mein Vater Dosierungen verwechselt. Blutzuckermessungen führt er nicht mehr selbstständig durch.“',
+  '„Meine Mutter nimmt seit etwa einem Jahr kaum noch von sich aus Kontakt zu Freundinnen auf und verlässt die Wohnung nur noch in Begleitung.“'
+];
+var WEEK = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+var PGTAB = {pg:{2:347,3:599,4:800,5:990}, sl:{2:796,3:1497,4:1859,5:2299}};
+function eur(n){ return n.toLocaleString('de-DE') + ' €'; }
+
+var TOOLS = {
+/* ---------------- Band 2 ---------------- */
+antragsdatum:{band:2,kap:1,title:'Antragsdatum sichern',short:'Anruf bei der Pflegekasse, Gesprächsnotiz und Frist',
+  intro:'Ein kurzer Anruf bei der Pflegekasse reicht, um das Antragsdatum zu sichern. Die Telefonnummer steht auf der Krankenversicherungskarte deines Elternteils. Halte das Gespräch hier fest – die Frist für den Bescheid wird automatisch berechnet.',
+  parts:[
+    {type:'fields',fields:[
+      {k:'kasse',label:'Pflegekasse',ph:'z. B. AOK Baden-Württemberg'},
+      {k:'tel',label:'Telefonnummer der Pflegekasse',type:'tel',ph:'steht auf der Versichertenkarte',anchor:'anrufen'},
+      {k:'datum',label:'Datum des Anrufs oder Antrags',type:'date',def:today},
+      {k:'person',label:'Gesprächspartnerin oder Gesprächspartner'},
+      {k:'notiz',label:'Notizen zum Gespräch',type:'textarea',full:true,ph:'Was wurde zugesagt? Kommt das Formular per Post? Wurde der Eingang bestätigt?'}]},
+    {type:'out',render:function(s){ var d = parse(s.datum); if (!d) return '<div class="row"><span>Trage das Datum ein, dann siehst du die Fristen.</span></div>';
+      return '<div class="row"><span>Bescheid spätestens (25 Arbeitstage)</span><span class="big">' + de(addWork(d,25)) + '</span></div>' +
+             '<div class="row"><span>Ohne Begutachtung bis hier: Gutachterauswahl verlangen (20 Arbeitstage)</span><b>' + de(addWork(d,20)) + '</b></div>'; }},
+    {type:'note',cls:'tipbox',html:'Bitte am Telefon um eine <b>schriftliche Eingangsbestätigung mit Datum</b>. Sie belegt den Antragseingang für die Frist (§ 18c SGB XI) und den Leistungsbeginn (§ 33 Abs. 1 SGB XI). Gezählt werden Montag bis Freitag ohne bundesweite Feiertage; Unterbrechungen und Sonderfristen erklärt dir das Werkzeug <a data-to="fristen" href="#">Fristen</a>.'}],
+  actions:['call:tel','ics','mail','pdf'],
+  ics:function(s){ var d = parse(s.datum); if (!d) return 'Bitte zuerst das Datum des Anrufs eintragen.';
+    return [{date:addWork(d,25),title:'Pflegegrad: Bescheid fällig – sonst bei der Pflegekasse nachfragen',desc:'Antrag gestellt am ' + deShort(s.datum) + ' bei ' + (s.kasse||'der Pflegekasse') + '. 25 Arbeitstage sind um.',alarm:'-P1D'},
+            {date:addWork(d,20),title:'Pflegegrad: Begutachtung schon erfolgt?',desc:'Wenn nach 20 Arbeitstagen noch keine Begutachtung war, muss die Pflegekasse in der Regel drei unabhängige Gutachter zur Auswahl nennen (§ 18 Abs. 3 SGB XI).'}]; },
+  mailSubject:'Pflegegrad: Antragsdatum gesichert'},
+
+lebensbereiche:{band:2,kap:2,title:'Alltagsnotizen zu den sechs Lebensbereichen',short:'Für jeden Bereich eine konkrete Alltagssituation',
+  intro:'Notiere für jeden der sechs Lebensbereiche eine konkrete Situation: Was gelingt allein, wobei braucht es Erinnerung oder Anleitung, wobei körperliche Hilfe? Stichworte reichen. Diese Übersicht wird später zur Grundlage für die Begutachtung.',
+  parts:[{type:'fields',fields:MOD.map(function(m,i){ return {k:'m'+(i+1),label:'Modul ' + (i+1) + ' · ' + m[0],type:'textarea',full:true,hint:m[1],ph:'Allein: …\nMit Erinnerung oder Anleitung: …\nMit körperlicher Hilfe: …'}; })}],
+  actions:['copy','mail','pdf'],mailSubject:'Pflegegrad: Alltagsnotizen zu den sechs Lebensbereichen'},
+
+fristen:{band:2,kap:3,title:'Fristen berechnen',short:'Bescheid, Begutachtung und Gutachterauswahl',
+  intro:'Trage ein, wann dein Antrag bei der Pflegekasse eingegangen ist. Das Werkzeug rechnet die gesetzlichen Fristen in Arbeitstagen aus (Montag bis Freitag ohne bundesweite Feiertage).',
+  parts:[
+    {type:'fields',fields:[
+      {k:'datum',label:'Antrag eingegangen am',type:'date',def:today},
+      {k:'art',label:'Situation deines Elternteils',type:'select',opts:[['regel','zu Hause, keine Besonderheit'],['kh','im Krankenhaus oder in stationärer Reha, Hospiz oder ambulant palliativ versorgt'],['pz','zu Hause, und du hast Pflegezeit angekündigt oder Familienpflegezeit vereinbart']]}]},
+    {type:'out',render:function(s){ var d = parse(s.datum); if (!d) return '<div class="row"><span>Trage das Eingangsdatum ein.</span></div>';
+      var h = '<div class="row"><span>Bescheid spätestens (25 Arbeitstage)</span><span class="big">' + de(addWork(d,25)) + '</span></div>';
+      if (s.art === 'kh') h += '<div class="row"><span>Begutachtung spätestens (5 Arbeitstage, wenn für die weitere Versorgung nötig)</span><b>' + de(addWork(d,5)) + '</b></div>';
+      if (s.art === 'pz') h += '<div class="row"><span>Begutachtung spätestens (10 Arbeitstage)</span><b>' + de(addWork(d,10)) + '</b></div>';
+      h += '<div class="row"><span>Noch keine Begutachtung? Ab hier Gutachterauswahl verlangen (20 Arbeitstage)</span><b>' + de(addWork(d,20)) + '</b></div>';
+      return h; }},
+    {type:'note',cls:'warnbox',html:'Überschreitet die Pflegekasse die Frist, sind unter den gesetzlichen Voraussetzungen <b>70 Euro je angefangener Woche</b> zu zahlen – ohne gesonderten Antrag. Die Zahlung entfällt, wenn die Kasse die Verzögerung nicht zu vertreten hat. Gesetzliche Unterbrechungen können die Frist verschieben. Die Berechnung ist eine Orientierung, keine Rechtsberatung.'}],
+  actions:['ics','pdf'],
+  ics:function(s){ var d = parse(s.datum); if (!d) return 'Bitte zuerst das Eingangsdatum eintragen.';
+    var e = [{date:addWork(d,25),title:'Pflegegrad: Bescheid fällig',desc:'25 Arbeitstage seit Antragseingang am ' + deShort(s.datum) + '. Kein Bescheid? Bei der Pflegekasse nachfragen.',alarm:'-P1D'},{date:addWork(d,20),title:'Pflegegrad: Begutachtung schon erfolgt?',desc:'20 Arbeitstage seit Antragseingang.'}];
+    if (s.art === 'kh') e.push({date:addWork(d,5),title:'Pflegegrad: Begutachtung fällig (5 Arbeitstage)'});
+    if (s.art === 'pz') e.push({date:addWork(d,10),title:'Pflegegrad: Begutachtung fällig (10 Arbeitstage)'});
+    return e; }},
+
+unterlagen:{band:2,kap:4,title:'Unterlagen für die Begutachtung',short:'Checkliste für den Hausbesuch',
+  intro:'Leg alles an einem Ort zusammen, was die Gutachterin oder der Gutachter sehen möchte. Hake ab, was schon bereitliegt.',
+  parts:[
+    {type:'check',k:'u',title:'Unterlagen',items:['Aktuelle Arztberichte','Medikamentenplan','Krankenhausentlassbriefe','Diagnosenliste','Hilfsmittelverordnungen','Pflegetagebuch der letzten 2–3 Wochen']},
+    {type:'check',k:'v',title:'Vorbereitung für den Termin',items:['Vorhandene Hilfsmittel (Rollator, Pflegebett, Hausnotruf) sichtbar aufgestellt','Eine vertraute Person ist während des ganzen Termins dabei','Mit dem Elternteil besprochen, ehrlich über den Alltag zu sprechen','Eigene Fragen an die Gutachterin oder den Gutachter notiert']},
+    {type:'fields',fields:[{k:'termin',label:'Termin der Begutachtung (falls bekannt)',type:'date'},{k:'erinnern',label:'Erinnerung zum Sammeln am',type:'date',def:function(){ return iso(addDays(new Date(),1)); },anchor:'kalender'}]}],
+  actions:['ics','pdf'],
+  ics:function(s){ var e = []; var r = parse(s.erinnern); if (r) e.push({date:r,time:'18:00',dur:30,title:'Unterlagen für die Begutachtung sammeln',desc:'Arztberichte, Medikamentenplan, Entlassbriefe, Diagnosenliste, Hilfsmittelverordnungen an einem Ort zusammenlegen.'});
+    var t = parse(s.termin); if (t) { e.push({date:t,title:'Begutachtung Pflegegrad',desc:'Unterlagen und Pflegetagebuch bereitlegen. Vertraute Person ist dabei.',alarm:'-P1D'}); }
+    return e.length ? e : 'Bitte ein Datum für die Erinnerung eintragen.'; }},
+
+formulierungen:{band:2,kap:5,title:'Formulierungen für die sechs Module',short:'Musterformulierungen anpassen und übernehmen',
+  intro:'Für jedes Modul steht hier eine Musterformulierung aus dem Buch. Ersetze die Beispiele durch das, was du bei deinem Elternteil tatsächlich beobachtest – mit Häufigkeit, Zeitraum und Folge.',
+  parts:[{type:'fields',fields:MOD.map(function(m,i){ return {k:'f'+(i+1),label:'Modul ' + (i+1) + ' · ' + m[0],type:'textarea',full:true,def:MUSTER[i],rows:5}; })},
+         {type:'note',cls:'tipbox',html:'Die Muster sind Vorlagen, keine Kopiervorlagen im wörtlichen Sinn. Mit „Muster wiederherstellen“ holst du den Originaltext zurück.'}],
+  actions:['copy','mail','pdf','restore'],mailSubject:'Pflegegrad: Meine Formulierungen für den Antrag'},
+
+pflegetagebuch:{band:2,kap:6,title:'Pflegetagebuch',short:'14-Tage-Unterstützungsprotokoll digital führen',
+  intro:'Beginne heute, auch wenn noch kein Termin feststeht. Je länger du das Tagebuch führst, desto aussagekräftiger ist es. Ein Eintrag muss nicht lang sein.',
+  parts:[
+    {type:'fields',fields:[{k:'name',label:'Name deines Elternteils'},{k:'von',label:'Zeitraum ab',type:'date',def:today},{k:'zeit',label:'Tägliche Erinnerung um',type:'time',def:'19:00',anchor:'kalender'}]},
+    {type:'table',k:'t',cols:['Datum','Situation','Welche Hilfe war nötig?','Häufigkeit / Dauer','Besonderheiten'],types:['date','textarea','textarea','text','textarea'],rows:3,add:'Eintrag hinzufügen'}],
+  actions:['ics','mail','pdf','vorlage:vorlagen/14-tage-protokoll.pdf'],
+  ics:function(s){ var d = parse(s.von) || new Date(); return [{date:d,time:s.zeit||'19:00',dur:15,rrule:'FREQ=DAILY;COUNT=14',title:'Pflegetagebuch: heutigen Tag eintragen',desc:'Situation, nötige Hilfe, Häufigkeit oder Dauer, Besonderheiten.'}]; },
+  mailSubject:'Pflegetagebuch'},
+
+widerspruch:{band:2,kap:7,title:'Widerspruch: Frist und Musterschreiben',short:'Monatsfrist berechnen, Widerspruch fristwahrend senden',
+  intro:'Grundsätzlich hast du einen Monat ab Bekanntgabe des Bescheids Zeit. Warte nicht auf die ausführliche Begründung – der kurze, fristwahrende Widerspruch reicht zunächst.',
+  parts:[
+    {type:'fields',fields:[
+      {k:'bdatum',label:'Datum des Bescheids',type:'date',hint:'Bei Versand per Post gilt der Bescheid am 4. Tag danach als bekannt gegeben (§ 37 Abs. 2 SGB X).'},
+      {k:'zugang',label:'Später erhalten? Tatsächlicher Zugang',type:'date',hint:'Nur ausfüllen, wenn der Brief erst nach dem 4. Tag angekommen ist.'},
+      {k:'name',label:'Versicherte Person (Name)'},{k:'vnr',label:'Versicherungsnummer'},
+      {k:'abs',label:'Dein Name und Kontaktdaten',type:'textarea',full:true}]},
+    {type:'out',render:function(s){ var r = widerspruch(s); if (!r) return '<div class="row"><span>Trage das Datum des Bescheids ein.</span></div>';
+      return '<div class="row"><span>Bekanntgabe</span><b>' + de(r.bek) + '</b></div><div class="row"><span>Widerspruch muss eingegangen sein bis</span><span class="big">' + de(r.ende) + '</span></div>' +
+        (r.shift ? '<div class="row"><span>Verschoben, weil das Fristende auf ein Wochenende oder einen bundesweiten Feiertag fällt.</span></div>' : '') +
+        (r.over ? '<div class="row"><span><b>Diese Frist ist abgelaufen.</b> Hole sofort Beratung ein: Bei fehlender oder fehlerhafter Rechtsbehelfsbelehrung gilt meist ein Jahr, bei unverschuldeter Versäumnis ist Wiedereinsetzung möglich.</span></div>'
+                : '<div class="row"><span>Empfehlung: absenden bis</span><b>' + de(r.send) + '</b></div>'); }},
+    {type:'letter',render:function(s){ return 'Sehr geehrte Damen und Herren,\n\nhiermit lege ich Widerspruch gegen den Bescheid vom ' + (s.bdatum ? deShort(s.bdatum) : '[Datum]') + ' betreffend ' + (s.name || '[Name]') + ', Versicherungsnummer ' + (s.vnr || '[Versicherungsnummer]') + ', ein.\nEine ausführliche Begründung reiche ich innerhalb der nächsten Wochen nach.\nIch bitte um Bestätigung des Eingangs.\n\nMit freundlichen Grüßen\n' + (s.abs || '[Name, Kontaktdaten]'); }},
+    {type:'note',cls:'warnbox',html:'Der Widerspruch muss innerhalb der Frist <b>bei der Pflegekasse vorliegen</b>. Sende ihn nachweisbar (Fax mit Sendebericht, Einschreiben, Online-Postfach der Kasse). Fehlt die Rechtsbehelfsbelehrung oder ist sie fehlerhaft, gilt in der Regel ein Jahr. Regionale Feiertage verschieben die Frist nur, wenn sie am Sitz der Kasse gelten. Die Berechnung ist eine Orientierung, keine Rechtsberatung – hole bei Zweifeln Beratung ein.'}],
+  actions:['copyletter','mailletter','ics','pdf'],
+  ics:function(s){ var r = widerspruch(s); if (!r) return 'Bitte zuerst das Datum des Bescheids eintragen.'; if (r.over) return 'Die Frist ist bereits abgelaufen – ein Kalendereintrag hilft hier nicht mehr. Hole bitte sofort Beratung ein.';
+    return [{date:r.send,title:'Widerspruch Pflegegrad absenden',desc:'Fristende: ' + de(r.ende) + '. Kurzer fristwahrender Widerspruch genügt.',alarm:'-PT15H'},{date:r.ende,title:'Fristende Widerspruch Pflegegrad',desc:'Der Widerspruch muss heute spätestens bei der Pflegekasse vorliegen.',alarm:'-P2D'}]; },
+  mailSubject:'Widerspruch gegen den Bescheid'},
+
+leistungen:{band:2,kap:8,title:'Leistungs-Check',short:'Was nutzen wir schon, was ist offen?',
+  intro:'Wähle den Pflegegrad. Die Liste zeigt, welche Leistungen infrage kommen und mit welchem Betrag. Markiere, was ihr schon nutzt und was noch offen ist.',
+  parts:[
+    {type:'fields',fields:[{k:'pg',label:'Pflegegrad',type:'select',opts:[['','bitte wählen'],['1','Pflegegrad 1'],['2','Pflegegrad 2'],['3','Pflegegrad 3'],['4','Pflegegrad 4'],['5','Pflegegrad 5']]}]},
+    {type:'leist'},
+    {type:'note',cls:'tipbox',html:'Beträge nach Rechtsstand 10.10.2026. Monatsbeträge, Jahresbudgets und Zuschüsse je Maßnahme sind kein frei verfügbares Monatsgeld. Pflegegeld und Sachleistung lassen sich anteilig kombinieren (§ 38 SGB XI).'}],
+  actions:['mail','pdf'],mailSubject:'Pflege: Welche Leistungen nutzen wir schon?'},
+
+gesamtuebersicht:{band:2,kap:9,title:'Deine finanzielle Gesamtübersicht',short:'Alle Bausteine auf einen Blick',
+  intro:'Trage für deinen Elternteil ein, was zutrifft, und lass offen, was noch geklärt werden muss. Schon das Ausfüllen zeigt dir, welche Anrufe oder Anträge als Nächstes anstehen.',
+  parts:[{type:'fields',fields:[{k:'pg',label:'Pflegegrad',type:'select',opts:[['','noch offen'],['1','1'],['2','2'],['3','3'],['4','4'],['5','5']]},{k:'stand',label:'Stand',type:'date',def:today}]},
+    {type:'table',k:'g',cols:['Leistung','Voraussetzung','Für uns relevant?','Betrag / Bezugszeitraum','Nutzung / Antrag / Erstattung geklärt?'],
+      fixed:[['Pflegegeld','PG 2, häusliche Pflege sichergestellt','monatlich, gegebenenfalls anteilig'],['Pflegesachleistungen','PG 2, häusliche Pflege','monatliches Budget für Dienste'],['Entlastungsbetrag','PG 1, häusliche Pflege','bis 131 € / Monat, Kostenerstattung'],['Pflegehilfsmittel zum Verbrauch','PG 1, Bedarf bei häuslicher Pflege','bis 42 € / Monat'],['Verhinderungs-/Kurzzeitpflege (Jahresbudget)','PG 2, weitere Voraussetzungen je Leistung','bis 3.539 € / Jahr gemeinsam'],['Wohnraumanpassung','PG 1','bis 4.180 € / Maßnahme'],['Pflegeberatung','bei Leistungsbezug oder Antrag','kostenlos'],['Pflegeunterstützungsgeld','akute Pflegesituation eines nahen Angehörigen','bis zu 10 Arbeitstage / Kalenderjahr je pflegebedürftiger Person']],
+      fixedCols:2,types:['select:|ja|nein|klären','text','text'],defs:[null,2,null]},
+    {type:'note',cls:'tipbox',html:'Die letzte Spalte hält fest, was noch zu tun ist: einen Antrag stellen, einen Anbieter auswählen oder Belege einreichen.'}],
+  actions:['pdf','mail'],mailSubject:'Unsere Pflege-Gesamtübersicht'},
+
+/* ---------------- Band 1 ---------------- */
+beobachtung:{band:1,kap:1,title:'Beobachtungsprotokoll',short:'Konkrete Situationen sachlich festhalten',
+  intro:'Halte zwei konkrete Situationen aus den letzten Tagen fest: Was ist passiert, was gelang selbstständig, wo war Hilfe nötig? Beobachtbare Fakten statt Vermutungen.',
+  parts:[{type:'fields',fields:[{k:'name',label:'Name'},{k:'von',label:'Zeitraum von',type:'date',def:today},{k:'bis',label:'bis',type:'date'}]},
+    {type:'table',k:'t',cols:['Datum / Uhrzeit','Konkrete Situation und Beobachtung','Was gelang selbstständig?','Welche Hilfe war nötig / welches Risiko bestand?'],types:['text','textarea','textarea','textarea'],rows:2,add:'Situation hinzufügen'},
+    {type:'fields',fields:[{k:'veraendert',label:'Was hat sich im Beobachtungszeitraum verändert?',type:'textarea',full:true},{k:'klaeren',label:'Was soll beim nächsten Arzt- oder Beratungsgespräch geklärt werden?',type:'textarea',full:true}]}],
+  actions:['mail','pdf','vorlage:vorlagen/band1/beobachtungsprotokoll.pdf'],mailSubject:'Beobachtungen zu Mama/Papa'},
+
+notizkarte:{band:1,kap:2,title:'Notizkarten',short:'Leitsätze für den Alltag, mit Erinnerung',
+  intro:'Leg dir den Leitsatz dorthin, wo du ihn im Alltag siehst – an den Kühlschrank, in den Kalender oder ins Portemonnaie. Die Erinnerung erscheint morgen früh auf deinem Handy.',
+  parts:[{type:'cards'},
+    {type:'fields',fields:[{k:'eigen',label:'Mein eigener Satz',type:'textarea',full:true},{k:'datum',label:'Erinnerung am',type:'date',def:function(){ return iso(addDays(new Date(),1)); },anchor:'kalender'},{k:'zeit',label:'um',type:'time',def:'07:30'}]}],
+  actions:['ics','pdf','vorlage:vorlagen/band1/notizkarten.pdf'],
+  ics:function(s){ var d = parse(s.datum); if (!d) return 'Bitte ein Datum eintragen.'; return [{date:d,time:s.zeit||'07:30',dur:5,title:'Leitsatz lesen',desc:'Ich muss heute nicht die gesamte Pflege lösen. Ich muss nur den nächsten verantwortbaren Schritt gehen.' + (s.eigen ? '\n\n' + s.eigen : '')}]; }},
+
+teilschritte:{band:1,kap:3,title:'Teilschritte zurückgeben',short:'Kleine Schritte, die dein Elternteil wieder selbst macht',
+  intro:'Trage eine Aufgabe ein, die du zuletzt komplett übernommen hast, und notiere den kleinen Teilschritt, den dein Elternteil wieder selbst ausführt. Prüfe nach ein bis zwei Wochen, wie es gelaufen ist.',
+  parts:[{type:'table',k:'t',cols:['Aufgabe','Teilschritt, den mein Elternteil wieder selbst übernimmt','Ab wann','Wie lief es?'],types:['text','textarea','date','textarea'],rows:2,add:'Aufgabe hinzufügen'},
+    {type:'fields',fields:[{k:'gebraucht',label:'Was hat mein Elternteil dabei gebraucht (Zeit, Hilfsmittel, Erinnerung)?',type:'textarea',full:true},{k:'pruef',label:'Erinnerung zum Nachprüfen am',type:'date',def:function(){ return iso(addDays(new Date(),14)); }}]}],
+  actions:['ics','pdf','vorlage:vorlagen/band1/teilschritte.pdf'],
+  ics:function(s){ var d = parse(s.pruef); if (!d) return 'Bitte ein Datum eintragen.'; return [{date:d,time:'18:00',dur:15,title:'Teilschritt nachprüfen: Wie lief es?'}]; }},
+
+antrag:{band:1,kap:5,title:'Antrag auf Pflegeleistungen',short:'Formloser Antrag als Musterschreiben',
+  intro:'Der Antrag ist formlos möglich – telefonisch, per E-Mail, Fax oder Brief. Fülle die Felder aus; das Schreiben entsteht darunter. Notiere danach das Eingangsdatum.',
+  parts:[{type:'fields',fields:[{k:'abs',label:'Absender (Name, Anschrift, Telefon)',type:'textarea'},{k:'kasse',label:'An die Pflegekasse bei der',type:'textarea',ph:'Name und Anschrift der Krankenkasse'},
+      {k:'ort',label:'Ort'},{k:'datum',label:'Datum',type:'date',def:today},{k:'vp',label:'Versicherte Person (Name, Geburtsdatum)'},{k:'vnr',label:'Versichertennummer'},
+      {k:'vollm',label:'Ich stelle den Antrag als bevollmächtigte Person (Kopie der Vollmacht liegt bei)',type:'checkbox',full:true}]},
+    {type:'letter',render:function(s){ return (s.abs||'[Absender]') + '\n\nAn die Pflegekasse bei der\n' + (s.kasse||'[Krankenkasse]') + '\n\n' + (s.ort||'[Ort]') + ', ' + (s.datum ? deShort(s.datum) : '[Datum]') +
+      '\n\nAntrag auf Leistungen der Pflegeversicherung\nVersicherte Person: ' + (s.vp||'[Name, Geburtsdatum]') + '\nVersichertennummer: ' + (s.vnr||'[Nummer]') +
+      '\n\nSehr geehrte Damen und Herren,\n\nhiermit stelle ich für mich / für die oben genannte versicherte Person einen Antrag auf Leistungen der Pflegeversicherung. Bitte veranlassen Sie die Begutachtung zur Feststellung der Pflegebedürftigkeit und senden Sie mir die erforderlichen Antragsunterlagen zu.\n\nAußerdem bitte ich um Pflegeberatung nach § 7a SGB XI sowie um eine schriftliche Bestätigung des Antragseingangs.' +
+      (s.vollm ? '\n\nIch stelle den Antrag als bevollmächtigte Person. Eine Kopie der Vollmacht liegt bei.' : '') + '\n\nMit freundlichen Grüßen\n\n\n(Unterschrift)'; }},
+    {type:'note',cls:'tipbox',html:'<b>So reichst du den Antrag nachweisbar ein:</b> per Fax mit Sendebericht, per E-Mail, über den Online-Antrag der Pflegekasse oder persönlich mit quittierter Kopie. Leistungen gibt es frühestens ab dem Monat der Antragstellung (§ 33 SGB XI).'},
+    {type:'fields',fields:[{k:'eingang',label:'Antrag eingereicht am',type:'date'},{k:'weg',label:'Weg',type:'select',opts:[['','bitte wählen'],['E-Mail','E-Mail'],['Fax','Fax'],['Brief','Brief'],['Online','Online-Antrag'],['persönlich','persönlich']]}]},
+    {type:'out',render:function(s){ var d = parse(s.eingang); return d ? '<div class="row"><span>Bescheid spätestens (25 Arbeitstage)</span><span class="big">' + de(addWork(d,25)) + '</span></div>' : '<div class="row"><span>Trage das Eingangsdatum ein, dann siehst du die Frist.</span></div>'; }}],
+  actions:['copyletter','mailletter','ics','pdf','vorlage:vorlagen/band1/antrag.pdf'],
+  ics:function(s){ var d = parse(s.eingang); if (!d) return 'Bitte zuerst das Eingangsdatum eintragen.'; return [{date:addWork(d,25),title:'Pflegegrad: Bescheid fällig – sonst nachfragen',desc:'Antrag eingereicht am ' + deShort(s.eingang) + (s.weg ? ' per ' + s.weg : '') + '.',alarm:'-P1D'}]; },
+  mailSubject:'Antrag auf Leistungen der Pflegeversicherung'},
+
+ordner:{band:1,kap:6,title:'Notfallmappe mit fünf Registern',short:'Ordner-Checkliste',
+  intro:'Lege einen Ordner mit fünf klar beschrifteten Registern an und hefte die ersten vorhandenen Dokumente direkt ein. Hake ab, was schon drin ist.',
+  parts:[{type:'check',k:'r1',title:'1 · Medizin',items:['Medikationsplan','Diagnosen','Entlassbriefe']},
+    {type:'check',k:'r2',title:'2 · Pflegekasse',items:['Anträge','Gutachten','Bescheide','Pflegedienstverträge']},
+    {type:'check',k:'r3',title:'3 · Vorsorge & Recht',items:['Vorsorgevollmacht','Patientenverfügung','Bankvollmachten']},
+    {type:'check',k:'r4',title:'4 · Behörden',items:['Krankenversichertenkarte (Kopie)','Schwerbehindertenausweis','Rentenbescheid']},
+    {type:'check',k:'r5',title:'5 · Organisation',items:['Telefonliste','Gesprächsnotizen mit Datum und Ansprechperson']},
+    {type:'note',cls:'tipbox',html:'Banken akzeptieren oft nur ihre eigenen Vollmachtsformulare zusätzlich zur Vorsorgevollmacht – frag gezielt danach. Für Immobiliengeschäfte braucht die Vollmacht eine notarielle Beurkundung.'}],
+  actions:['pdf']},
+
+wochenplan:{band:1,kap:7,title:'Wochenstrukturplan',short:'Feste Zeitfenster, Zuständigkeit, Vertretung',
+  intro:'Plane feste Zeitfenster, eine verantwortliche Person und eine verbindliche Vertretung. Der pflegefreie Tag ist vorbelegt – er wird genauso fest geplant wie jede Pflegeaufgabe.',
+  parts:[{type:'fields',fields:[{k:'von',label:'Woche vom',type:'date',def:function(){ var d = new Date(); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); return iso(d); }},{k:'frei',label:'Pflegefreier Tag',type:'select',opts:WEEK.map(function(w,i){ return [String(i),w]; }),def:'6',anchor:'kalender'}]},
+    {type:'table',k:'t',cols:['Tag','Zeitfenster','Feste Routine','Zuständigkeit','Vertretung'],fixed:WEEK.map(function(w){ return [w]; }),fixedCols:1,types:['text','text','text','text']},
+    {type:'fields',fields:[{k:'review',label:'Kurzes Wochen-Review: Was funktioniert? Wo entsteht eine Lücke?',type:'textarea',full:true}]}],
+  actions:['ics','mail','pdf','vorlage:vorlagen/band1/wochenplan.pdf'],
+  ics:function(s){ var d = parse(s.von); if (!d) return 'Bitte das Startdatum der Woche eintragen.'; var f = +(s.frei||6); var x = new Date(d); while (((x.getDay()+6)%7) !== f) x.setDate(x.getDate()+1);
+    return [{date:x,rrule:'FREQ=WEEKLY',title:'Pflegefreier Tag',desc:'Dieser Tag gehört dir. Die Vertretung ist eingeplant.'}]; },
+  mailSubject:'Unser Wochenplan für die Pflege'},
+
+ichzeit:{band:1,kap:8,title:'Meine Ich-Zeit',short:'Jeden Tag 30 Minuten nur für dich',
+  intro:'Trage für jeden Tag eine feste Zeit von etwa 30 Minuten ein, die nur dir gehört, und hake ab, ob du sie eingehalten hast. Die Kalenderdatei trägt dir alle sieben Termine ein.',
+  parts:[{type:'fields',fields:[{k:'von',label:'Woche vom',type:'date',def:today,anchor:'kalender'},{k:'std',label:'Standardzeit',type:'time',def:'20:00',hint:'gilt für Tage ohne eigene Uhrzeit'}]},
+    {type:'table',k:'t',cols:['Tag','Uhrzeit','Was ich für mich mache','Eingehalten'],fixed:WEEK.map(function(w){ return [w]; }),fixedCols:1,types:['time','text','checkbox']},
+    {type:'fields',fields:[{k:'gut',label:'Was hat mir diese Woche am meisten gutgetan?',type:'textarea',full:true}]}],
+  actions:['ics','pdf','vorlage:vorlagen/band1/ichzeit.pdf'],
+  ics:function(s){ var d = parse(s.von); if (!d) return 'Bitte das Startdatum eintragen.'; var rows = s.t || [], ev = [];
+    for (var i = 0; i < 7; i++){ var day = addDays(d,i), wi = (day.getDay()+6)%7, r = rows[wi] || []; ev.push({date:day,time:r[1]||s.std||'20:00',dur:30,title:'Ich-Zeit' + (r[2] ? ': ' + r[2] : ''),desc:'30 Minuten nur für dich.'}); }
+    return ev; }},
+
+'ein-seiten-plan':{band:1,kap:9,title:'Dein Ein-Seiten-Plan',short:'Die Situation auf einem Blatt',
+  intro:'Fasse die Situation auf einem einzigen Blatt zusammen und hefte es ganz vorne in deine Notfallmappe.',
+  parts:[{type:'fields',fields:[{k:'a',label:'Was gelingt selbstständig?',type:'textarea',full:true},{k:'b',label:'Wobei ist regelmäßig Hilfe nötig?',type:'textarea',full:true},{k:'c',label:'Wer übernimmt welche Hauptaufgabe?',type:'textarea',full:true},{k:'d',label:'Welche Anträge und Arzttermine laufen aktuell?',type:'textarea',full:true},{k:'termin',label:'Nächster Prüftermin',type:'date'},{k:'grenze',label:'Meine persönliche Belastungsgrenze'}]}],
+  actions:['ics','mail','pdf'],
+  ics:function(s){ var d = parse(s.termin); if (!d) return 'Bitte den nächsten Prüftermin eintragen.'; return [{date:d,time:'18:00',dur:60,title:'Prüfgespräch: Ein-Seiten-Plan durchgehen',alarm:'-P1D'}]; },
+  mailSubject:'Unser Ein-Seiten-Plan'},
+
+aufgabenplan:{band:1,kap:4,title:'Aufgaben- und Vertretungsplan',short:'Wer macht was in der Familie?',
+  intro:'Verteile die Aufgaben verbindlich: Für jede Aufgabe gibt es eine hauptverantwortliche Person und eine Vertretung. Schick den Plan danach an die Familie.',
+  parts:[{type:'fields',fields:[{k:'fam',label:'Familie / Haushalt'},{k:'stand',label:'Stand',type:'date',def:today}]},
+    {type:'table',k:'t',cols:['Aufgabe und Häufigkeit','Hauptverantwortlich','Verbindliche Vertretung','Nächste Prüfung'],fixed:[['Medikamente und Rezepte'],['Arzttermine und Fahrten'],['Einkauf und Haushalt'],['Post, Finanzen und Behörden'],['Körperpflege / Hygiene'],['Wochenend-Entlastung'],['Weitere Aufgabe:']],fixedCols:1,types:['text','text','date']},
+    {type:'fields',fields:[{k:'offen',label:'Wichtigste offene Absprache',type:'textarea',full:true}]}],
+  actions:['mail','pdf','vorlage:vorlagen/band1/aufgabenplan.pdf'],mailSubject:'Pflege: Wer übernimmt welche Aufgabe?'},
+
+kontaktliste:{band:1,kap:6,title:'Kontaktliste',short:'Alle wichtigen Stellen an einem Ort',
+  intro:'Trage die wichtigsten Stellen mit Kontaktdaten, Aktenzeichen und dem nächsten Schritt ein.',
+  parts:[{type:'fields',fields:[{k:'name',label:'Name der pflegebedürftigen Person',full:true}]},
+    {type:'table',k:'t',cols:['Bereich / Stelle','Name und Kontaktdaten','Aktenzeichen / Vers.-Nr.','Nächster Schritt / Termin'],fixed:[['Hausarztpraxis'],['Facharzt / Geriatrie'],['Pflegekasse'],['Pflegestützpunkt / Beratung'],['Pflegedienst'],['Hausnotruf-Zentrale'],['Bevollmächtigte Person'],['Notfallkontakt / Schlüssel'],['Weitere Stelle:']],fixedCols:1,types:['textarea','text','text']},
+    {type:'note',cls:'warnbox',html:'Notfallnummern: <b>112</b> (akute Gefahr) · <b>116 117</b> (ärztlicher Bereitschaftsdienst)'}],
+  actions:['mail','pdf','vorlage:vorlagen/band1/kontaktliste.pdf'],mailSubject:'Kontaktliste Pflege'},
+
+/* ---------------- beide Bände ---------------- */
+ideenbox:{band:0,title:'Meine Ideenbox',short:'Notizen zu jedem Kapitel, mit Zeitstempel',
+  intro:'Halte fest, was dir beim Lesen einfällt. Jede Notiz bekommt Datum, Uhrzeit und das Kapitel, aus dem du kommst.',
+  parts:[{type:'ideen'}],actions:[]}
+};
+
+var ORDER = {1:['beobachtung','notizkarte','teilschritte','aufgabenplan','antrag','ordner','kontaktliste','wochenplan','ichzeit','ein-seiten-plan'],
+             2:['antragsdatum','lebensbereiche','fristen','unterlagen','formulierungen','pflegetagebuch','widerspruch','leistungen','gesamtuebersicht']};
+
+var LEIST = [['pg','Pflegegeld',function(g){ return g >= 2 ? eur(PGTAB.pg[g]) + ' / Monat' : 'erst ab PG 2'; }],
+             ['sl','Pflegesachleistung',function(g){ return g >= 2 ? 'bis ' + eur(PGTAB.sl[g]) + ' / Monat' : 'erst ab PG 2'; }],
+             ['eb','Entlastungsbetrag',function(){ return 'bis 131 € / Monat, gegen Beleg'; }],
+             ['hm','Pflegehilfsmittel zum Verbrauch',function(){ return 'bis 42 € / Monat'; }],
+             ['vk','Verhinderungs- und Kurzzeitpflege',function(g){ return g >= 2 ? 'bis 3.539 € / Jahr gemeinsam' : 'erst ab PG 2'; }],
+             ['wa','Wohnraumanpassung',function(){ return 'bis 4.180 € je Maßnahme'; }],
+             ['tn','Tages- und Nachtpflege',function(g){ return g >= 2 ? 'zusätzliches Budget, bei der Kasse erfragen' : 'erst ab PG 2'; }],
+             ['pb','Kostenlose Pflegeberatung',function(){ return 'unabhängig vom Pflegegrad'; }]];
+
+function widerspruch(s){
+  var b = parse(s.bdatum); if (!b) return null;
+  var bek = addDays(b,4), z = parse(s.zugang); if (z && z > bek) bek = z;
+  var raw = addMonth(bek), ende = nextWork(raw);
+  var t0 = new Date(); t0.setHours(0,0,0,0);
+  return {bek:bek, ende:ende, shift:+ende !== +raw, over:ende < t0, send:addDays(ende,-7) < t0 ? t0 : addDays(ende,-7)};
+}
+
+/* ============ Zustand ============ */
+var Q = new URLSearchParams(location.search);
+function sk(slug){ return 'pf_w_' + slug; }
+function load(slug){ try { return JSON.parse(store(sk(slug)) || '{}'); } catch(e){ return {}; } }
+function save(slug, s){ store(sk(slug), JSON.stringify(s)); }
+
+/* ============ Darstellung ============ */
+function route(){
+  var h = location.hash.replace('#',''), slug = null, anchor = null;
+  if (TOOLS[h]) slug = h;
+  else {
+    var m = location.pathname.match(/\/werkzeuge\/([a-z0-9-]+)\/?$/);
+    if (m && TOOLS[m[1]]) slug = m[1];
+    anchor = h || null;
+  }
+  APP.innerHTML = '';
+  if (SANDBOX && !SITE) APP.appendChild(el('<div class="testnote noprint">Testansicht. Auf der Website mein-pflegefahrplan.de funktionieren zusätzlich: Als PDF speichern, Kalenderdatei laden, E-Mail und Anrufen direkt aus dem Werkzeug.</div>'));
+  APP.appendChild(el('<div class="top noprint"><a class="brand" href="' + (SITE ? '/werkzeuge/' : '#start') + '">' + LOGO + 'PflegeFahrplan · Werkzeuge</a>' + (slug ? '<span class="crumb"><a href="' + (SITE ? '/werkzeuge/' : '#start') + '">Alle Werkzeuge</a></span>' : '') + '</div>'));
+  if (slug) renderTool(slug, anchor); else renderStart();
+  APP.appendChild(el('<div class="foot">Begleitwerkzeuge zur Buchreihe PflegeFahrplan von Dominik Feige. Die Werkzeuge ersetzen keine Rechts- oder Pflegeberatung im Einzelfall.' + (SITE ? ' · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a>' : '') + '</div>'));
+  window.scrollTo(0,0);
+  if (anchor) hilite(anchor);
+}
+
+function renderStart(){
+  var h = '<header><p class="eyebrow">Zu deinem Buch</p><h1>Werkzeuge zum Mitmachen</h1><p class="intro">Hier füllst du die Vorlagen aus den Büchern digital aus. Du kannst sie als PDF speichern, per E-Mail an die Familie schicken oder Termine in deinen Kalender übernehmen.</p>' + privacy() + '</header>';
+  [1,2].forEach(function(b){
+    h += '<div class="bandhead">' + shape(b) + '<h2>' + BANDNAME[b] + '</h2></div><div class="tools">';
+    ORDER[b].forEach(function(k){ var t = TOOLS[k]; h += '<a class="tool" href="' + link(k) + '"><span>Kapitel ' + t.kap + '</span><b>' + esc(t.title) + '</b><span>' + esc(t.short) + '</span></a>'; });
+    h += '</div>';
+  });
+  h += '<div class="bandhead">' + shape(0) + '<h2>Für alle Bände</h2></div><div class="tools"><a class="tool" href="' + link('ideenbox') + '"><b>Meine Ideenbox</b><span>Notizen zu jedem Kapitel, mit Zeitstempel</span></a></div>';
+  APP.appendChild(el('<main>' + h + '</main>'));
+}
+
+function privacy(){ return '<p class="privacy"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 L16 4.5 V9.5 C16 13.5 13.4 16.6 10 18 C6.6 16.6 4 13.5 4 9.5 V4.5 Z" fill="none" stroke="var(--gruen)" stroke-width="1.8" stroke-linejoin="round"/><path d="M7.2 10 l2 2 l3.8-4" fill="none" stroke="var(--gruen)" stroke-width="1.8" stroke-linecap="round"/></svg><span>Deine Eingaben werden nur in diesem Browser auf deinem Gerät gespeichert. Es wird nichts übertragen, es gibt kein Konto.</span></p>'; }
+
+function renderTool(slug, anchor){
+  var T = TOOLS[slug], S = load(slug), main = el('<main></main>');
+  document.title = T.title + ' · PflegeFahrplan';
+  var eyebrow = T.band ? BANDNAME[T.band] + ' · Kapitel ' + T.kap : (Q.get('band') ? BANDNAME[+Q.get('band')] + (Q.get('kapitel') ? ' · Kapitel ' + Q.get('kapitel') : '') : 'Für alle Bände');
+  main.appendChild(el('<header class="head">' + shape(T.band || +Q.get('band') || 0) + '<div><p class="eyebrow">' + esc(eyebrow) + '</p><h1>' + esc(T.title) + '</h1><p class="intro">' + esc(T.intro) + '</p></div></header>'));
+  var outs = [];
+  function changed(){ save(slug, S); outs.forEach(function(f){ f(); }); }
+  T.parts.forEach(function(p){ var n = PART[p.type](p, S, changed, outs, slug); if (n) main.appendChild(n); });
+  outs.forEach(function(f){ f(); });
+  if (T.actions.length) main.appendChild(actions(T, slug, S, changed));
+  main.appendChild(el(privacy()));
+  main.appendChild(resetBox(slug));
+  APP.appendChild(main);
+}
+
+function pv(input){ var s = D.createElement('span'); s.className = 'pv'; input.after(s); var f = function(){ s.textContent = input.type === 'date' ? deShort(input.value) : input.tagName === 'SELECT' ? (input.selectedOptions[0] ? input.selectedOptions[0].text : '') : input.value; }; input.addEventListener('input', f); input.addEventListener('change', f); f(); }
+function defv(f){ return typeof f.def === 'function' ? f.def() : f.def; }
+var UID = 0;
+function control(type, val, opts, ph){
+  var c, id = 'f' + (++UID);
+  if (type === 'textarea'){ c = D.createElement('textarea'); c.value = val || ''; }
+  else if (type === 'select' || (type && type.indexOf('select:') === 0)){ c = D.createElement('select'); (opts || type.slice(7).split('|').map(function(o){ return [o, o || '–']; })).forEach(function(o){ var op = D.createElement('option'); op.value = o[0]; op.textContent = o[1]; c.appendChild(op); }); c.value = val == null ? '' : val; }
+  else if (type === 'checkbox'){ c = D.createElement('input'); c.type = 'checkbox'; c.checked = !!val; }
+  else { c = D.createElement('input'); c.type = type || 'text'; c.value = val || ''; if (type === 'tel') c.autocomplete = 'tel'; }
+  if (ph) c.placeholder = ph;
+  c.id = id; return c;
+}
+
+var PART = {
+  fields:function(p, S, changed){
+    var box = el('<div class="card"><div class="grid"></div></div>'), g = box.firstChild;
+    p.fields.forEach(function(f){
+      if (S[f.k] === undefined && f.def !== undefined) S[f.k] = defv(f);
+      var w = el('<div class="field' + (f.full || f.type === 'textarea' ? ' full' : '') + '"' + (f.anchor ? ' id="a-' + f.anchor + '"' : '') + '></div>');
+      var c = control(f.type, S[f.k], f.opts, f.ph);
+      if (f.rows) c.rows = f.rows;
+      if (f.type === 'checkbox'){ var l = el('<label class="check" for="' + c.id + '"></label>'); l.appendChild(c); l.appendChild(el('<span>' + esc(f.label) + '</span>')); w.appendChild(l); }
+      else { w.appendChild(el('<label for="' + c.id + '">' + esc(f.label) + '</label>')); w.appendChild(c); pv(c); if (f.hint) w.appendChild(el('<span class="hint">' + esc(f.hint) + '</span>')); }
+      c.addEventListener(f.type === 'checkbox' || f.type === 'select' ? 'change' : 'input', function(){ S[f.k] = f.type === 'checkbox' ? c.checked : c.value; changed(); });
+      c.dataset.k = f.k;
+      g.appendChild(w);
+    });
+    return box;
+  },
+  out:function(p, S, changed, outs){ var o = el('<div class="out" aria-live="polite"></div>'); outs.push(function(){ o.innerHTML = p.render(S); }); return o; },
+  note:function(p){ var n = el('<div class="' + p.cls + '">' + p.html + '</div>'); n.querySelectorAll('[data-to]').forEach(function(a){ a.href = link(a.getAttribute('data-to')); }); return n; },
+  letter:function(p, S, changed, outs){ var w = el('<div><h2>Dein Schreiben</h2><div class="letter"></div></div>'), L = w.lastChild; outs.push(function(){ L.textContent = p.render(S); }); return w; },
+  check:function(p, S, changed, outs){
+    var st = S[p.k] || (S[p.k] = []), box = el('<div class="card"><h3>' + esc(p.title) + '</h3><div class="progress"><i></i></div><p class="hint"></p></div>');
+    var bar = box.querySelector('.progress i'), hint = box.querySelector('.hint');
+    p.items.forEach(function(it, i){ var c = control('checkbox', st[i]); var l = el('<label class="check" for="' + c.id + '"></label>'); l.appendChild(c); l.appendChild(el('<span>' + esc(it) + '</span>')); box.appendChild(l);
+      var paint = function(){ l.classList.toggle('done', c.checked); }; paint();
+      c.addEventListener('change', function(){ st[i] = c.checked; paint(); changed(); }); });
+    outs.push(function(){ var n = st.filter(Boolean).length; bar.style.width = (100 * n / p.items.length) + '%'; hint.textContent = n + ' von ' + p.items.length + ' erledigt'; });
+    return box;
+  },
+  table:function(p, S, changed){
+    var rows = S[p.k];
+    if (!rows){ rows = []; if (p.fixed) p.fixed.forEach(function(f){ var r = f.slice(0, p.fixedCols); (p.defs||[]).forEach(function(d,j){ if (d != null) r[p.fixedCols + j] = f[d]; }); rows.push(r); }); else for (var i = 0; i < (p.rows||1); i++) rows.push([]); S[p.k] = rows; }
+    var wrap = el('<div><div class="tbl"><table><thead><tr></tr></thead><tbody></tbody></table></div></div>'), tr = wrap.querySelector('thead tr'), tb = wrap.querySelector('tbody');
+    p.cols.forEach(function(c){ tr.appendChild(el('<th scope="col">' + esc(c) + '</th>')); }); if (p.add) tr.appendChild(el('<th><span class="pv"></span></th>'));
+    function draw(){
+      tb.innerHTML = '';
+      rows.forEach(function(r, ri){
+        var row = D.createElement('tr');
+        for (var j = 0; j < p.cols.length; j++){
+          var td = D.createElement('td');
+          if (p.fixedCols && j < p.fixedCols){ td.className = 'fl'; td.textContent = r[j] || ''; }
+          else {
+            var ty = p.types[p.fixedCols ? j - p.fixedCols : j];
+            var c = control(ty, r[j]); c.setAttribute('aria-label', p.cols[j] + (p.fixedCols ? ' – ' + r[0] : ' – Zeile ' + (ri+1)));
+            (function(c, j){ c.addEventListener(ty === 'checkbox' || /^select/.test(ty) ? 'change' : 'input', function(){ r[j] = ty === 'checkbox' ? c.checked : c.value; changed(); }); })(c, j);
+            td.appendChild(c); if (ty !== 'checkbox') pv(c);
+          }
+          row.appendChild(td);
+        }
+        if (p.add){ var d = el('<td><button class="del" type="button" aria-label="Zeile entfernen" title="Zeile entfernen">×</button></td>'); d.firstChild.addEventListener('click', function(){ rows.splice(ri,1); if (!rows.length) rows.push([]); changed(); draw(); }); row.appendChild(d); }
+        tb.appendChild(row);
+      });
+    }
+    draw();
+    if (p.add){ var b = el('<button class="btn ghost addrow" type="button">+ ' + esc(p.add) + '</button>'); b.addEventListener('click', function(){ rows.push(p.types[0] === 'date' ? [today()] : []); changed(); draw(); var last = tb.lastChild.querySelector('input,textarea'); if (last) last.focus(); }); wrap.appendChild(b); }
+    return wrap;
+  },
+  leist:function(p, S, changed, outs){
+    var L = LEIST;
+    var st = S.st || (S.st = {}), wrap = el('<div><div class="lrows"></div><div class="out" aria-live="polite"></div></div>');
+    var tb = wrap.querySelector('.lrows'), sum = wrap.querySelector('.out'), amt = [];
+    L.forEach(function(l){ var tr = el('<div class="lrow"><div><b>' + l[1] + '</b><span class="amt"></span></div></div>'); amt.push([tr.querySelector('.amt'), l[2]]);
+      var c = control('select', st[l[0]], [['','Status wählen'],['genutzt','nutzen wir schon'],['beantragt','beantragt'],['offen','noch offen'],['nein','nicht relevant']]); c.setAttribute('aria-label','Status ' + l[1]);
+      c.addEventListener('change', function(){ st[l[0]] = c.value; tr.dataset.st = c.value; changed(); }); tr.dataset.st = st[l[0]] || ''; tr.appendChild(c); pv(c); tb.appendChild(tr); });
+    outs.push(function(){ var g = +S.pg || 0; amt.forEach(function(a){ a[0].textContent = g ? a[1](g) : 'Pflegegrad wählen'; });
+      var n = {genutzt:0, beantragt:0, offen:0}; Object.keys(st).forEach(function(k){ if (n[st[k]] !== undefined) n[st[k]]++; });
+      sum.innerHTML = '<div class="row"><span>Nutzen wir schon</span><b>' + n.genutzt + '</b></div><div class="row"><span>Beantragt</span><b>' + n.beantragt + '</b></div><div class="row"><span>Noch offen</span><span class="big">' + n.offen + '</span></div>'; });
+    return wrap;
+  },
+  cards:function(p, S, changed, outs){
+    var w = el('<div class="cards"></div>'), C = [['Leitgedanke · Teil I','So viel Hilfe wie nötig – so viel eigenes Leben wie möglich.'],['Leitgedanke · Teil II','Dein Elternteil wird nicht zu deinem Kind.'],['Leitsatz · Kapitel 2','Ich muss heute nicht die gesamte Pflege lösen. Ich muss nur den nächsten verantwortbaren Schritt gehen.']];
+    C.forEach(function(c){ w.appendChild(el('<div class="nk"><span class="chip">' + c[0] + '</span><p>' + c[1] + '</p></div>')); });
+    var own = el('<div class="nk"><span class="chip">Mein eigener Satz</span><p></p></div>'); w.appendChild(own);
+    outs.push(function(){ own.lastChild.textContent = S.eigen || '…'; });
+    return w;
+  },
+  ideen:function(p, S, changed, outs, slug){
+    var band = Q.get('band') || '', kap = Q.get('kapitel') || '';
+    var notes = S.n || (S.n = []);
+    var w = el('<div><div class="card"><div class="field full"><label for="neu">Neue Notiz' + (band ? ' zu ' + esc(BANDNAME[+band] || 'Band ' + band) + (kap ? ', Kapitel ' + esc(kap) : '') : '') + '</label><textarea id="neu" rows="4" placeholder="Was ist dir beim Lesen eingefallen?"></textarea></div><div class="acts" style="margin:.8rem 0 0"><button class="btn" type="button" id="add">Notiz speichern</button></div></div>' +
+      '<div class="grid" style="margin-top:1rem"><div class="field"><label for="flt">Anzeigen</label><select id="flt"><option value="">alle Notizen</option><option value="1">Band 1</option><option value="2">Band 2</option></select></div></div><ul class="notes"></ul><p class="hint" id="cnt"></p></div>');
+    var ta = w.querySelector('#neu'), ul = w.querySelector('.notes'), flt = w.querySelector('#flt'), cnt = w.querySelector('#cnt');
+    function draw(){ ul.innerHTML = ''; var shown = notes.filter(function(n){ return !flt.value || String(n.b) === flt.value; });
+      shown.slice().reverse().forEach(function(n){ var li = el('<li><small></small><p></p><button type="button">Löschen</button></li>');
+        li.firstChild.textContent = n.d + (n.b ? ' · Band ' + n.b : '') + (n.k ? ' · Kapitel ' + n.k : ''); li.children[1].textContent = n.t;
+        li.lastChild.addEventListener('click', function(){ notes.splice(notes.indexOf(n),1); changed(); draw(); }); ul.appendChild(li); });
+      cnt.textContent = shown.length ? shown.length + (shown.length === 1 ? ' Notiz' : ' Notizen') : 'Noch keine Notizen. Deine erste Notiz erscheint hier mit Datum und Kapitel.'; }
+    w.querySelector('#add').addEventListener('click', function(){ var t = ta.value.trim(); if (!t) { ta.focus(); return; } notes.push({t:t, d:new Date().toLocaleString('de-DE',{dateStyle:'medium',timeStyle:'short'}), b:band, k:kap}); ta.value = ''; changed(); draw(); });
+    flt.addEventListener('change', draw); draw();
+    S._text = function(){ return notes.map(function(n){ return n.d + (n.b ? ' · Band ' + n.b : '') + (n.k ? ' · Kapitel ' + n.k : '') + '\n' + n.t; }).join('\n\n'); };
+    var acts = el('<div class="acts"></div>'), msg = el('<p class="msg" role="status"></p>');
+    acts.appendChild(btnMail('Meine Notizen – PflegeFahrplan', function(){ return S._text(); }, msg));
+    acts.appendChild(btnCopy(function(){ return S._text(); }, msg));
+    acts.appendChild(btnPdf(msg)); w.appendChild(acts); w.appendChild(msg);
+    return w;
+  }
+};
+
+/* ============ Text für E-Mail, Kopieren ============ */
+function asText(T, S){
+  var out = [T.title, ''];
+  T.parts.forEach(function(p){
+    if (p.type === 'fields') p.fields.forEach(function(f){ var v = S[f.k]; if (v === undefined || v === '' || v === false) return; if (f.type === 'date') v = deShort(v); if (f.type === 'checkbox') v = 'ja'; if (f.type === 'select' && f.opts) { var o = f.opts.filter(function(x){ return x[0] === String(v); })[0]; v = o ? o[1] : v; } out.push(f.label + ': ' + v); });
+    if (p.type === 'out' || p.type === 'letter'){ var t = D.createElement('div'); t.innerHTML = p.type === 'out' ? p.render(S).replace(/<\/span>\s*<(span|b)/g,'</span>: <$1').replace(/<\/div>/g,'\n') : esc(p.render(S)); out.push('', t.textContent.trim()); }
+    if (p.type === 'check'){ out.push('', p.title); p.items.forEach(function(it,i){ out.push(((S[p.k]||[])[i] ? '[x] ' : '[ ] ') + it); }); }
+    if (p.type === 'table'){ out.push(''); (S[p.k]||[]).forEach(function(r){ var cells = p.cols.map(function(c,j){ var v = r[j]; if (v === true) v = 'ja'; if (v && /^\d{4}-\d\d-\d\d$/.test(v)) v = deShort(v); return v ? c + ': ' + v : ''; }).filter(Boolean); if (cells.length) out.push('• ' + cells.join(' | ')); }); }
+    if (p.type === 'leist'){ var g = +S.pg || 0; LEIST.forEach(function(l){ var st = (S.st||{})[l[0]]; out.push('• ' + l[1] + (g ? ' (' + l[2](g) + ')' : '') + ': ' + ({genutzt:'nutzen wir schon',beantragt:'beantragt',offen:'noch offen',nein:'nicht relevant'}[st] || 'nicht eingetragen')); }); }
+  });
+  out.push('', '– erstellt mit den Werkzeugen zur Buchreihe PflegeFahrplan');
+  return out.join('\n').replace(/\n{3,}/g,'\n\n');
+}
+function letterText(T, S){ var p = T.parts.filter(function(x){ return x.type === 'letter'; })[0]; return p ? p.render(S) : asText(T,S); }
+
+/* ============ Aktionen ============ */
+function mk(label, cls){ var b = el('<button class="btn ' + (cls||'') + '" type="button">' + label + '</button>'); return b; }
+function blocked(b, msg, what){ if (!(SANDBOX && !SITE)) return false; b.setAttribute('aria-disabled','true'); b.title = what + ' funktioniert auf der Website'; b.addEventListener('click', function(){ say(msg, what + ' ist in der Testansicht gesperrt und funktioniert auf der Website.', true); }); return true; }
+function say(m, t, err){ m.textContent = t; m.classList.toggle('err', !!err); }
+function btnPdf(msg){ var b = mk('📄 Als PDF speichern', 'alt'); b.dataset.act = 'pdf'; if (!blocked(b, msg, 'Als PDF speichern')) b.addEventListener('click', function(){ say(msg, 'Im Druckdialog „Als PDF sichern“ wählen.'); window.print(); }); return b; }
+function btnCopy(fn, msg, label){ var b = mk(label || '📋 Text kopieren', 'alt'); b.addEventListener('click', function(){ var t = fn(); var ok = function(){ say(msg, 'Kopiert. Du kannst den Text jetzt einfügen.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, function(){ fallbackCopy(t, msg); }); else fallbackCopy(t, msg); }); return b; }
+function fallbackCopy(t, msg){ var box = el('<div class="mailbox"></div>'); box.textContent = t; msg.after(box); var r = D.createRange(); r.selectNodeContents(box); var s = getSelection(); s.removeAllRanges(); s.addRange(r); say(msg, 'Text ist markiert – jetzt kopieren.'); }
+function btnMail(subject, fn, msg, label){ var b = mk(label || '✉️ Per E-Mail senden', 'alt'); b.dataset.act = 'mail';
+  b.addEventListener('click', function(){ var body = fn();
+    if (SANDBOX && !SITE){ var box = el('<div class="mailbox"></div>'); box.textContent = 'Betreff: ' + subject + '\n\n' + body; var old = msg.parentNode.querySelector('.mailbox'); if (old) old.remove(); msg.after(box); say(msg, 'In der Testansicht wird die E-Mail hier angezeigt. Auf der Website öffnet sich dein Mailprogramm.'); return; }
+    location.href = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body.slice(0, 1800)); say(msg, body.length > 1800 ? 'Dein Mailprogramm öffnet sich. Der Text war lang – nutze zusätzlich „Als PDF speichern“ und häng das PDF an.' : 'Dein Mailprogramm öffnet sich mit dem fertigen Text.'); }); return b; }
+
+function actions(T, slug, S, changed){
+  var wrap = el('<div class="noprint"><div class="acts"></div><p class="msg" role="status"></p></div>'), A = wrap.firstChild, msg = wrap.lastChild;
+  T.actions.forEach(function(a){
+    var b;
+    if (a.indexOf('call:') === 0){ b = mk('📞 Pflegekasse anrufen', 'or'); b.dataset.act = 'anrufen'; b.addEventListener('click', function(){ var t = (S[a.slice(5)]||'').replace(/[^0-9+]/g,''); if (!t){ say(msg, 'Trag zuerst die Telefonnummer der Pflegekasse ein. Sie steht auf der Krankenversicherungskarte.', true); var f = D.querySelector('[data-k=' + a.slice(5) + ']'); if (f) f.focus(); return; }
+        if (SANDBOX && !SITE){ say(msg, 'Nummer zum Wählen: ' + S[a.slice(5)] + ' (in der Testansicht wird nicht gewählt).'); return; } location.href = 'tel:' + t; }); }
+    else if (a === 'ics'){ b = mk('📅 In den Kalender', ''); b.dataset.act = 'kalender'; if (!blocked(b, msg, 'Die Kalenderdatei')) b.addEventListener('click', function(){ var r = T.ics(S); if (typeof r === 'string'){ say(msg, r, true); return; } download('PflegeFahrplan_' + slug + '.ics', icsText(r), 'text/calendar'); say(msg, r.length === 1 ? 'Kalenderdatei geladen. Öffne sie, um den Termin zu übernehmen.' : 'Kalenderdatei mit ' + r.length + ' Terminen geladen. Öffne sie, um die Termine zu übernehmen.'); }); }
+    else if (a === 'mail'){ b = btnMail(T.mailSubject || T.title, function(){ return asText(T, S); }, msg); }
+    else if (a === 'mailletter'){ b = btnMail(T.mailSubject || T.title, function(){ return letterText(T, S); }, msg, '✉️ Schreiben per E-Mail'); }
+    else if (a === 'copy'){ b = btnCopy(function(){ return asText(T, S); }, msg); }
+    else if (a === 'copyletter'){ b = btnCopy(function(){ return letterText(T, S); }, msg, '📋 Schreiben kopieren'); }
+    else if (a === 'pdf'){ b = btnPdf(msg); }
+    else if (a === 'restore'){ b = mk('↺ Muster wiederherstellen', 'ghost'); b.addEventListener('click', function(){ for (var i = 1; i <= 6; i++) S['f'+i] = MUSTER[i-1]; save(slug, S); route(); }); }
+    else if (a.indexOf('vorlage:') === 0){ b = el('<a class="btn ghost" href="' + (SITE ? '/werkzeuge/' : '') + a.slice(8) + '" target="_blank" rel="noopener">🖨 Leere Druckvorlage (PDF)</a>'); }
+    if (b) A.appendChild(b);
+  });
+  return wrap;
+}
+
+function resetBox(slug){
+  var w = el('<div class="noprint" style="margin-top:1rem"><button class="btn ghost" type="button">Eingaben in diesem Werkzeug löschen</button></div>');
+  w.firstChild.addEventListener('click', function(){ if (w.querySelector('.confirm')) return; var c = el('<div class="confirm"><span>Wirklich alle Eingaben löschen?</span><button class="btn or" type="button">Ja, löschen</button><button class="btn alt" type="button">Abbrechen</button></div>');
+    c.children[1].addEventListener('click', function(){ store(sk(slug), null); route(); }); c.children[2].addEventListener('click', function(){ c.remove(); }); w.appendChild(c); });
+  return w;
+}
+
+function hilite(a){
+  var map = {kalender:'kalender', anrufen:'anrufen', pdf:'pdf'};
+  var b = D.querySelector('[data-act="' + (map[a]||a) + '"]'), f = D.getElementById('a-' + a);
+  var t = f || b; if (!t) return;
+  setTimeout(function(){ t.scrollIntoView({behavior:'smooth', block:'center'}); if (b) b.classList.add('pulse'); var i = f && f.querySelector('input,select,textarea'); if (i) i.focus({preventScroll:true}); }, 200);
+}
+
+window.addEventListener('hashchange', route);
+route();
+})();
+</script>
+
+</body></html>

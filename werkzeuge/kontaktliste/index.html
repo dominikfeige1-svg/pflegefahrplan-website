@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+<html lang="de"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>PflegeFahrplan Werkzeuge</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Digitale Werkzeuge zu den Büchern der Reihe PflegeFahrplan. Alle Eingaben bleiben auf deinem Gerät.">
@@ -59,6 +59,10 @@ input[type=checkbox]{width:1.35rem;height:1.35rem;accent-color:var(--gruen);flex
 .out b{color:var(--navy);font-variant-numeric:tabular-nums}
 .out .big{font-size:1.35rem;font-weight:800;color:var(--petrol);font-variant-numeric:tabular-nums}
 .warnbox{background:var(--warn-soft);border-left:.3rem solid var(--warn);border-radius:.5rem;padding:.8rem 1rem;font:500 .9rem/1.5 var(--f-head);margin:1rem 0}
+.legal{background:var(--paper);border:1.5px solid var(--orange);border-radius:.5rem;padding:.8rem 1rem;font:500 .88rem/1.5 var(--f-head);margin:1rem 0}
+.legal b{color:var(--orange)}
+.confirmbox{display:flex;gap:.7rem;align-items:flex-start;background:var(--orange-soft);border-radius:.5rem;padding:.8rem 1rem;margin:1.2rem 0 0;font:600 .92rem/1.45 var(--f-head);cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .tipbox{background:var(--gruen-soft);border-left:.3rem solid var(--gruen);border-radius:.5rem;padding:.8rem 1rem;font:500 .9rem/1.5 var(--f-head);margin:1rem 0}
 .check{display:flex;gap:.7rem;align-items:flex-start;padding:.45rem 0;font-size:1rem;font-family:var(--f-body);font-weight:400;cursor:pointer}
 .check.done span{color:var(--muted);text-decoration:line-through}
@@ -219,6 +223,9 @@ var WEEK = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Son
 var PGTAB = {pg:{2:347,3:599,4:800,5:990}, sl:{2:796,3:1497,4:1859,5:2299}};
 function eur(n){ return n.toLocaleString('de-DE') + ' €'; }
 
+var LEGAL = {type:'note',cls:'legal',html:'<b>Mustertext und Orientierung, keine Rechtsberatung.</b> Du verschickst das Schreiben selbst und bist für Inhalt, Empfänger und Fristwahrung verantwortlich. Lass dir den Eingang von der Pflegekasse schriftlich bestätigen.'};
+var LEGALF = {type:'note',cls:'legal',html:'<b>Orientierung, keine Rechtsberatung.</b> Die Berechnung zählt Montag bis Freitag ohne bundesweite Feiertage. Maßgeblich sind die Angaben deiner Pflegekasse und die Fristen in ihren Schreiben.'};
+var LEGALW = {type:'note',cls:'legal',html:'<b>Orientierung, keine Rechtsberatung.</b> Maßgeblich ist die Rechtsbehelfsbelehrung in deinem Bescheid. Schick den Widerspruch lieber früher als später und nachweisbar ab.'};
 var TOOLS = {
 /* ---------------- Band 2 ---------------- */
 antragsdatum:{band:2,kap:1,title:'Antragsdatum sichern',short:'Anruf bei der Pflegekasse, Gesprächsnotiz und Frist',
@@ -233,6 +240,7 @@ antragsdatum:{band:2,kap:1,title:'Antragsdatum sichern',short:'Anruf bei der Pfl
     {type:'out',render:function(s){ var d = parse(s.datum); if (!d) return '<div class="row"><span>Trage das Datum ein, dann siehst du die Fristen.</span></div>';
       return '<div class="row"><span>Bescheid spätestens (25 Arbeitstage)</span><span class="big">' + de(addWork(d,25)) + '</span></div>' +
              '<div class="row"><span>Ohne Begutachtung bis hier: Gutachterauswahl verlangen (20 Arbeitstage)</span><b>' + de(addWork(d,20)) + '</b></div>'; }},
+    LEGALF,
     {type:'note',cls:'tipbox',html:'Bitte am Telefon um eine <b>schriftliche Eingangsbestätigung mit Datum</b>. Sie belegt den Antragseingang für die Frist (§ 18c SGB XI) und den Leistungsbeginn (§ 33 Abs. 1 SGB XI). Gezählt werden Montag bis Freitag ohne bundesweite Feiertage; Unterbrechungen und Sonderfristen erklärt dir das Werkzeug <a data-to="fristen" href="#">Fristen</a>.'}],
   actions:['call:tel','ics','mail','pdf'],
   ics:function(s){ var d = parse(s.datum); if (!d) return 'Bitte zuerst das Datum des Anrufs eintragen.';
@@ -257,6 +265,7 @@ fristen:{band:2,kap:3,title:'Fristen berechnen',short:'Bescheid, Begutachtung un
       if (s.art === 'pz') h += '<div class="row"><span>Begutachtung spätestens (10 Arbeitstage)</span><b>' + de(addWork(d,10)) + '</b></div>';
       h += '<div class="row"><span>Noch keine Begutachtung? Ab hier Gutachterauswahl verlangen (20 Arbeitstage)</span><b>' + de(addWork(d,20)) + '</b></div>';
       return h; }},
+    LEGALF,
     {type:'note',cls:'warnbox',html:'Überschreitet die Pflegekasse die Frist, sind unter den gesetzlichen Voraussetzungen <b>70 Euro je angefangener Woche</b> zu zahlen – ohne gesonderten Antrag. Die Zahlung entfällt, wenn die Kasse die Verzögerung nicht zu vertreten hat. Gesetzliche Unterbrechungen können die Frist verschieben. Die Berechnung ist eine Orientierung, keine Rechtsberatung.'}],
   actions:['ics','pdf'],
   ics:function(s){ var d = parse(s.datum); if (!d) return 'Bitte zuerst das Eingangsdatum eintragen.';
@@ -304,7 +313,9 @@ widerspruch:{band:2,kap:7,title:'Widerspruch: Frist und Musterschreiben',short:'
         (r.shift ? '<div class="row"><span>Verschoben, weil das Fristende auf ein Wochenende oder einen bundesweiten Feiertag fällt.</span></div>' : '') +
         (r.over ? '<div class="row"><span><b>Diese Frist ist abgelaufen.</b> Hole sofort Beratung ein: Bei fehlender oder fehlerhafter Rechtsbehelfsbelehrung gilt meist ein Jahr, bei unverschuldeter Versäumnis ist Wiedereinsetzung möglich.</span></div>'
                 : '<div class="row"><span>Empfehlung: absenden bis</span><b>' + de(r.send) + '</b></div>'); }},
+    LEGALW,
     {type:'letter',render:function(s){ return 'Sehr geehrte Damen und Herren,\n\nhiermit lege ich Widerspruch gegen den Bescheid vom ' + (s.bdatum ? deShort(s.bdatum) : '[Datum]') + ' betreffend ' + (s.name || '[Name]') + ', Versicherungsnummer ' + (s.vnr || '[Versicherungsnummer]') + ', ein.\nEine ausführliche Begründung reiche ich innerhalb der nächsten Wochen nach.\nIch bitte um Bestätigung des Eingangs.\n\nMit freundlichen Grüßen\n' + (s.abs || '[Name, Kontaktdaten]'); }},
+    LEGAL,
     {type:'note',cls:'warnbox',html:'Der Widerspruch muss innerhalb der Frist <b>bei der Pflegekasse vorliegen</b>. Sende ihn nachweisbar (Fax mit Sendebericht, Einschreiben, Online-Postfach der Kasse). Fehlt die Rechtsbehelfsbelehrung oder ist sie fehlerhaft, gilt in der Regel ein Jahr. Regionale Feiertage verschieben die Frist nur, wenn sie am Sitz der Kasse gelten. Die Berechnung ist eine Orientierung, keine Rechtsberatung – hole bei Zweifeln Beratung ein.'}],
   actions:['copyletter','mailletter','ics','pdf'],
   ics:function(s){ var r = widerspruch(s); if (!r) return 'Bitte zuerst das Datum des Bescheids eintragen.'; if (r.over) return 'Die Frist ist bereits abgelaufen – ein Kalendereintrag hilft hier nicht mehr. Hole bitte sofort Beratung ein.';
@@ -359,6 +370,7 @@ antrag:{band:1,kap:5,title:'Antrag auf Pflegeleistungen',short:'Formloser Antrag
       '\n\nAntrag auf Leistungen der Pflegeversicherung\nVersicherte Person: ' + (s.vp||'[Name, Geburtsdatum]') + '\nVersichertennummer: ' + (s.vnr||'[Nummer]') +
       '\n\nSehr geehrte Damen und Herren,\n\nhiermit stelle ich für mich / für die oben genannte versicherte Person einen Antrag auf Leistungen der Pflegeversicherung. Bitte veranlassen Sie die Begutachtung zur Feststellung der Pflegebedürftigkeit und senden Sie mir die erforderlichen Antragsunterlagen zu.\n\nAußerdem bitte ich um Pflegeberatung nach § 7a SGB XI sowie um eine schriftliche Bestätigung des Antragseingangs.' +
       (s.vollm ? '\n\nIch stelle den Antrag als bevollmächtigte Person. Eine Kopie der Vollmacht liegt bei.' : '') + '\n\nMit freundlichen Grüßen\n\n\n(Unterschrift)'; }},
+    LEGAL,
     {type:'note',cls:'tipbox',html:'<b>So reichst du den Antrag nachweisbar ein:</b> per Fax mit Sendebericht, per E-Mail, über den Online-Antrag der Pflegekasse oder persönlich mit quittierter Kopie. Leistungen gibt es frühestens ab dem Monat der Antragstellung (§ 33 SGB XI).'},
     {type:'fields',fields:[{k:'eingang',label:'Antrag eingereicht am',type:'date'},{k:'weg',label:'Weg',type:'select',opts:[['','bitte wählen'],['E-Mail','E-Mail'],['Fax','Fax'],['Brief','Brief'],['Online','Online-Antrag'],['persönlich','persönlich']]}]},
     {type:'out',render:function(s){ var d = parse(s.eingang); return d ? '<div class="row"><span>Bescheid spätestens (25 Arbeitstage)</span><span class="big">' + de(addWork(d,25)) + '</span></div>' : '<div class="row"><span>Trage das Eingangsdatum ein, dann siehst du die Frist.</span></div>'; }}],
@@ -462,7 +474,7 @@ function route(){
   if (SANDBOX && !SITE) APP.appendChild(el('<div class="testnote noprint">Testansicht. Auf der Website mein-pflegefahrplan.de funktionieren zusätzlich: Als PDF speichern, Kalenderdatei laden, E-Mail und Anrufen direkt aus dem Werkzeug.</div>'));
   APP.appendChild(el('<div class="top noprint"><a class="brand" href="' + (SITE ? '/werkzeuge/' : '#start') + '">' + LOGO + 'PflegeFahrplan · Werkzeuge</a>' + (slug ? '<span class="crumb"><a href="' + (SITE ? '/werkzeuge/' : '#start') + '">Alle Werkzeuge</a></span>' : '') + '</div>'));
   if (slug) renderTool(slug, anchor); else renderStart();
-  APP.appendChild(el('<div class="foot">Begleitwerkzeuge zur Buchreihe PflegeFahrplan von Dominik Feige. Die Werkzeuge ersetzen keine Rechts- oder Pflegeberatung im Einzelfall.' + (SITE ? ' · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a>' : '') + '</div>'));
+  APP.appendChild(el('<div class="foot">Begleitwerkzeuge zur Buchreihe PflegeFahrplan von Dominik Feige. Die Werkzeuge sind sorgfältig erstellt, ersetzen aber keine Rechts- oder Pflegeberatung im Einzelfall. Für Schreiben, die du verschickst, und für die Einhaltung von Fristen bist du selbst verantwortlich.' + (SITE ? ' · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a>' : '') + '</div>'));
   window.scrollTo(0,0);
   if (anchor) hilite(anchor);
 }
@@ -478,7 +490,7 @@ function renderStart(){
   APP.appendChild(el('<main>' + h + '</main>'));
 }
 
-function privacy(){ return '<p class="privacy"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 L16 4.5 V9.5 C16 13.5 13.4 16.6 10 18 C6.6 16.6 4 13.5 4 9.5 V4.5 Z" fill="none" stroke="var(--gruen)" stroke-width="1.8" stroke-linejoin="round"/><path d="M7.2 10 l2 2 l3.8-4" fill="none" stroke="var(--gruen)" stroke-width="1.8" stroke-linecap="round"/></svg><span>Deine Eingaben werden nur in diesem Browser auf deinem Gerät gespeichert. Es wird nichts übertragen, es gibt kein Konto.</span></p>'; }
+function privacy(){ return '<p class="privacy"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 L16 4.5 V9.5 C16 13.5 13.4 16.6 10 18 C6.6 16.6 4 13.5 4 9.5 V4.5 Z" fill="none" stroke="var(--gruen)" stroke-width="1.8" stroke-linejoin="round"/><path d="M7.2 10 l2 2 l3.8-4" fill="none" stroke="var(--gruen)" stroke-width="1.8" stroke-linecap="round"/></svg><span>Deine Eingaben werden nur in diesem Browser auf deinem Gerät gespeichert. Es wird nichts übertragen, es gibt kein Konto. Auf fremden oder gemeinsam genutzten Geräten nach dem Ausfüllen auf „Eingaben in diesem Werkzeug löschen“ tippen.</span></p>'; }
 
 function renderTool(slug, anchor){
   var T = TOOLS[slug], S = load(slug), main = el('<main></main>');
@@ -635,6 +647,12 @@ function btnMail(subject, fn, msg, label){ var b = mk(label || '✉️ Per E-Mai
 
 function actions(T, slug, S, changed){
   var wrap = el('<div class="noprint"><div class="acts"></div><p class="msg" role="status"></p></div>'), A = wrap.firstChild, msg = wrap.lastChild;
+  var gated = [], gate = null;
+  if (T.actions.some(function(a){ return a === 'copyletter' || a === 'mailletter'; })){
+    gate = el('<label class="confirmbox"><input type="checkbox" id="pf-confirm"/><span>Ich habe das Schreiben geprüft und verschicke es selbst.</span></label>');
+    wrap.insertBefore(gate, A);
+    gate.firstChild.addEventListener('change', function(){ gated.forEach(function(b){ b.disabled = !gate.firstChild.checked; }); say(msg, gate.firstChild.checked ? '' : 'Bitte zuerst bestätigen, dass du das Schreiben geprüft hast.'); });
+  }
   T.actions.forEach(function(a){
     var b;
     if (a.indexOf('call:') === 0){ b = mk('📞 Pflegekasse anrufen', 'or'); b.dataset.act = 'anrufen'; b.addEventListener('click', function(){ var t = (S[a.slice(5)]||'').replace(/[^0-9+]/g,''); if (!t){ say(msg, 'Trag zuerst die Telefonnummer der Pflegekasse ein. Sie steht auf der Krankenversicherungskarte.', true); var f = D.querySelector('[data-k=' + a.slice(5) + ']'); if (f) f.focus(); return; }
@@ -647,7 +665,7 @@ function actions(T, slug, S, changed){
     else if (a === 'pdf'){ b = btnPdf(msg); }
     else if (a === 'restore'){ b = mk('↺ Muster wiederherstellen', 'ghost'); b.addEventListener('click', function(){ for (var i = 1; i <= 6; i++) S['f'+i] = MUSTER[i-1]; save(slug, S); route(); }); }
     else if (a.indexOf('vorlage:') === 0){ b = el('<a class="btn ghost" href="' + (SITE ? '/werkzeuge/' : '') + a.slice(8) + '" target="_blank" rel="noopener">🖨 Leere Druckvorlage (PDF)</a>'); }
-    if (b) A.appendChild(b);
+    if (b){ if (gate && (a === 'copyletter' || a === 'mailletter')){ b.disabled = true; gated.push(b); } A.appendChild(b); }
   });
   return wrap;
 }

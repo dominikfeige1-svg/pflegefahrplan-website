@@ -1,0 +1,15 @@
+PflegeFahrplan – Werkzeugseiten (Stand 23.10.2026)
+
+Hochladen: Den Ordner "werkzeuge" so auf den Webspace legen, dass er unter
+https://mein-pflegefahrplan.de/werkzeuge/ erreichbar ist.
+Jedes Werkzeug liegt in einem eigenen Unterordner mit index.html
+(z. B. /werkzeuge/antragsdatum/). Alle Seiten sind identisch; welches Werkzeug
+erscheint, ergibt sich aus der Adresse.
+
+- Keine Datenbank, kein Server-Code, keine Cookies, keine externen Dienste.
+- Eingaben bleiben im Browser des Lesers (localStorage).
+- Schriften liegen lokal in /werkzeuge/fonts/ (Figtree, Source Serif 4; SIL Open Font License).
+- Druckvorlagen: /werkzeuge/vorlagen/ (PDF, A4).
+
+Vor dem Online-Gang nötig: Impressum (c/o-Anschrift) und Datenschutzerklärung
+auf der Website; Links darauf im Fuß der Seiten ergänzen.

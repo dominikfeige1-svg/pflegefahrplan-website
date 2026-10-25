@@ -132,6 +132,7 @@ td .del{background:none;border:0;color:var(--muted);font-size:1.1rem;cursor:poin
   table{min-width:0;font-size:9pt}
   .tbl{overflow:visible}
 }
+.backbar{background:#E7F1F1;border:1px solid #b9d3d1;color:#0E2C40;border-radius:.6em;padding:.7em 1em;margin:.8em 0;font-size:.95em;line-height:1.4}
 </style>
 
 </head><body><div class="wrap" id="app"></div>
@@ -473,6 +474,7 @@ function route(){
   APP.innerHTML = '';
   if (SANDBOX && !SITE) APP.appendChild(el('<div class="testnote noprint">Testansicht. Auf der Website mein-pflegefahrplan.de funktionieren zusätzlich: Als PDF speichern, Kalenderdatei laden, E-Mail und Anrufen direkt aus dem Werkzeug.</div>'));
   APP.appendChild(el('<div class="top noprint"><a class="brand" href="' + (SITE ? '/werkzeuge/' : '#start') + '">' + LOGO + 'PflegeFahrplan · Werkzeuge</a>' + (slug ? '<span class="crumb"><a href="' + (SITE ? '/werkzeuge/' : '#start') + '">Alle Werkzeuge</a></span>' : '') + '</div>'));
+  if (Q.get('von') === 'ebook') APP.appendChild(el('<div class="backbar noprint">↩ <b>Zurück zum E-Book:</b> oben links auf „◀ Bücher“ tippen (iPad/iPhone) oder wieder in deine Lese-App wechseln. Deine Eingaben bleiben hier gespeichert.</div>'));
   if (slug) renderTool(slug, anchor); else renderStart();
   APP.appendChild(el('<div class="foot">Begleitwerkzeuge zur Buchreihe PflegeFahrplan von Dominik Feige. Die Werkzeuge sind sorgfältig erstellt, ersetzen aber keine Rechts- oder Pflegeberatung im Einzelfall. Für Schreiben, die du verschickst, und für die Einhaltung von Fristen bist du selbst verantwortlich.' + (SITE ? ' · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a>' : '') + '</div>'));
   window.scrollTo(0,0);

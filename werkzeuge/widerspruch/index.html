@@ -500,7 +500,7 @@ function renderStart(){
   if (filtered) h += '<p class="intro"><a href="' + (SITE ? '/werkzeuge/?band=alle' : '#start') + '">Alle Werkzeuge der Reihe anzeigen</a></p>';
   bands.forEach(function(b){
     h += '<div class="bandhead">' + shape(b) + '<h2>' + BANDNAME[b] + '</h2></div><div class="tools">';
-    ORDER[b].forEach(function(k){ var t = TOOLS[k]; h += '<a class="tool" href="' + link(k) + '"><span>Kapitel ' + t.kap + '</span><b>' + esc(t.title) + '</b><span>' + esc(t.short) + '</span></a>'; });
+    ORDER[b].forEach(function(k){ var t = TOOLS[k]; h += '<a class="tool" href="' + link(k) + '">' + (b === t.band ? '<span>Kapitel ' + t.kap + '</span>' : '') + '<b>' + esc(t.title) + '</b><span>' + esc(t.short) + '</span></a>'; });
     h += '</div>';
   });
   h += '<div class="bandhead">' + shape(0) + '<h2>Für alle Bände</h2></div><div class="tools"><a class="tool" href="' + link('ideenbox') + '"><b>Meine Ideenbox</b><span>Notizen zu jedem Kapitel, mit Zeitstempel</span></a></div>';

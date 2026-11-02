@@ -198,9 +198,10 @@ function download(name, text, type){
 function shape(band){
   if (band === 1) return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4"/></svg>';
   if (band === 2) return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L38 36 L2 36 Z" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4" stroke-linejoin="round"/></svg>';
+  if (band === 3) return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="4" width="32" height="32" rx="3" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4"/></svg>';
   return '<svg class="shape" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="8" width="32" height="26" rx="4" fill="var(--petrol-soft)" stroke="var(--petrol)" stroke-width="2.4"/><path d="M10 16h20M10 22h14" stroke="var(--petrol)" stroke-width="2.4" stroke-linecap="round"/></svg>';
 }
-var BANDNAME = {1:'Band 1 · Rollentausch', 2:'Band 2 · Klartext Pflegegrad'};
+var BANDNAME = {1:'Band 1 · Rollentausch', 2:'Band 2 · Klartext Pflegegrad', 3:'Band 3 · Struktur schafft Kraft'};
 var LOGO = '<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="23" r="5" fill="none" stroke="var(--petrol)" stroke-width="2.6"/><path d="M14 23 C 20 23, 18 9, 24 9" fill="none" stroke="var(--orange)" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="9" r="3.2" fill="var(--orange)"/></svg>';
 
 /* ============ Inhalte der Werkzeuge ============ */
@@ -437,7 +438,8 @@ ideenbox:{band:0,title:'Meine Ideenbox',short:'Notizen zu jedem Kapitel, mit Zei
 };
 
 var ORDER = {1:['beobachtung','notizkarte','teilschritte','aufgabenplan','antrag','ordner','kontaktliste','wochenplan','ichzeit','ein-seiten-plan'],
-             2:['antragsdatum','lebensbereiche','fristen','unterlagen','formulierungen','pflegetagebuch','widerspruch','leistungen','gesamtuebersicht']};
+             2:['antragsdatum','lebensbereiche','fristen','unterlagen','formulierungen','pflegetagebuch','widerspruch','leistungen','gesamtuebersicht'],
+             3:['aufgabenplan','wochenplan','kontaktliste','ichzeit','ein-seiten-plan']};
 
 var LEIST = [['pg','Pflegegeld',function(g){ return g >= 2 ? eur(PGTAB.pg[g]) + ' / Monat' : 'erst ab PG 2'; }],
              ['sl','Pflegesachleistung',function(g){ return g >= 2 ? 'bis ' + eur(PGTAB.sl[g]) + ' / Monat' : 'erst ab PG 2'; }],
@@ -490,7 +492,13 @@ function route(){
 
 function renderStart(){
   var h = '<header><p class="eyebrow">Zu deinem Buch</p><h1>Werkzeuge zum Mitmachen</h1><p class="intro">Hier füllst du die Vorlagen aus den Büchern digital aus. Du kannst sie als PDF speichern, per E-Mail an die Familie schicken oder Termine in deinen Kalender übernehmen.</p>' + privacy() + '</header>';
-  [1,2].forEach(function(b){
+  /* K-G-14: Aus dem E-Book nur die Werkzeuge des jeweiligen Bandes zeigen (?band=1 | 2 | 3 | 1-2), für die Sitzung gemerkt; ?band=alle zeigt alles */
+  var qb = Q.get('band');
+  try { if (qb) sessionStorage.setItem('pf_band', qb); else qb = sessionStorage.getItem('pf_band'); } catch (e) {}
+  var bands = qb === '1-2' ? [1,2] : (ORDER[+qb] ? [+qb] : [1,2]);
+  var filtered = !!qb && qb !== 'alle';
+  if (filtered) h += '<p class="intro"><a href="' + (SITE ? '/werkzeuge/?band=alle' : '#start') + '">Alle Werkzeuge der Reihe anzeigen</a></p>';
+  bands.forEach(function(b){
     h += '<div class="bandhead">' + shape(b) + '<h2>' + BANDNAME[b] + '</h2></div><div class="tools">';
     ORDER[b].forEach(function(k){ var t = TOOLS[k]; h += '<a class="tool" href="' + link(k) + '"><span>Kapitel ' + t.kap + '</span><b>' + esc(t.title) + '</b><span>' + esc(t.short) + '</span></a>'; });
     h += '</div>';
